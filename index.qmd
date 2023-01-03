@@ -1,6 +1,5 @@
 ---
-title: Main page
+title: ""
 format: html
+author: ""
 ---
-
-Hello
