@@ -1,0 +1,24 @@
+author: "Kevin Reuning"
+project:
+  type: website
+
+website:
+  title: "Presentations"
+  site-url: "https://kevinreuning.com/presentations/"
+  navbar:
+    left:
+      - text: Home
+        file: index.qmd
+      - day_1.qmd
+      - day_2.qmd
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+  revealjs: 
+    execute:
+        echo: true
+
+

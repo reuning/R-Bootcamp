@@ -1,0 +1,445 @@
+---
+title: "Introduction to R: Plotting"
+author: "Kevin Reuning"
+format: revealjs
+
+---
+
+## Goals for this Bootcamp 
+
+
+## Goals for Today
+
+
+
+::: frame
+ggplot
+
+-   ggplot is another tidyverse package that is commonly used to make
+    plots.
+
+-   It has a somewhat unique way to create plots, but through this you
+    can create very custom plots (and easily change them)
+:::
+
+::: frame
+Questions to Answer
+
+-   What data are you using?
+
+-   What variables will be used?
+
+-   How will this data be shown?
+
+-   How will you identify things?
+:::
+
+::: frame
+How to Answer Them For ggplot we use different functions to answer them.
+
+-   What data are you using? `ggplot()`
+
+-   What variables will be used? `aes()`
+
+-   How will this data be shown? `geom_*()`
+
+-   How will you identify things? `labs(), ggtitle()`
+:::
+
+::: frame
+Simple Plot
+
+    ggplot(df, aes(x=mad_gdppc)) + geom_histogram() 
+
+-   What data are you using? Data from 'df': `ggplot(df, )`
+
+-   What variables will be used? 'mad_gdppc': on the x-axis
+    `aes(mad_gdppc)`
+
+-   How will this data be shown? A histogram: `geom_histogram()`
+
+Note: We chain together different functions by adding them to each
+other. We'll see why this is useful later.
+:::
+
+::: frame
+Simple Plot
+
+    ggplot(df, aes(x=mad_gdppc)) + geom_histogram() 
+
+![image](images/plot_1.png){width=".8\\textwidth"}
+:::
+
+::: frame
+Now you Pick one of the continuous variables in our data and make a
+histogram.
+
+    ggplot(_____, aes(x=_______)) + geom_histogram() 
+:::
+
+::: frame
+Labeling things
+
+-   We should always title our plots and provide labels for them.
+
+-   `labs()`: Labels for your plots. You provide them with `x=""`,
+    `y=""` or `title=""`
+:::
+
+::: frame
+Plot with Labels
+
+    ggplot(df, aes(x=mad_gdppc)) + geom_histogram()  + 
+    labs(y="Count", x="Median GDP per Capita", 
+    title="Histogram of GDP per Capita")
+
+![image](images/plot_2.png){width=".8\\textwidth"}
+:::
+
+::: frame
+Now you Add labels to your yplot.
+
+    + labs(y=_______, x=_________, title=________)
+:::
+
+::: frame
+What other plots? ggplot can make a *a lot* of plots:
+
+-   `geom_histogram()`: Histogram. Needs a variable on the x OR y.
+
+-   `geom_density()`: Smoothed Density. Needs a variable on the x OR y.
+
+-   `geom_point()`: Scatter. Needs a variable on the x AND y.
+
+-   `geom_smooth()`: Smoothed line. Needs a variable on the x AND y.
+
+-   `geom_col()`: Bars that are the heights of the number of
+    observations in each category. Needs a variable on the x OR y.
+
+-   `geom_bar()`: Bars that are the heights of a *a variable*. Needs a
+    variable on the x AND y.
+
+-   More: <https://ggplot2.tidyverse.org/reference/>
+:::
+
+::: frame
+Scatter Plot
+
+    ggplot(df, aes(x=mad_gdppc, y=bicc_gmi)) + 
+    geom_point() + 
+    labs(y="Militarization", x="Median GDP per Capita", 
+    title="Militarization vs GDP per Capita")
+
+What did we change?
+
+-   We now have a y variable in our `aes()` call.
+
+-   We switched `geom_histogram()` to `geom_point()`
+
+-   We updated the labels
+:::
+
+::: frame
+Scatter Plot
+
+    ggplot(df, aes(x=mad_gdppc, y=bicc_gmi)) + 
+    geom_point() + 
+    labs(y="Militarization", x="Median GDP per Capita", 
+    title="Militarization vs GDP per Capita")
+
+![image](images/plot_3.png){width=".8\\textwidth"}
+:::
+
+::: frame
+Now you Pick two continuous variables and make a scatter plot
+
+    ggplot(______, aes(x=______, y=______)) +  geom_point()
+:::
+
+::: frame
+Can we add some pizazz? The geom\_\* functions can take arguments to
+change the color, shape, etc.
+
+-   `color="red"`: Changes the color of the point (or the outline of the
+    bar).
+
+-   `fill="green"`: Changes the inside color (if relevant)
+
+-   `shape=2`: Changes the shape of the point.
+
+-   `size=4`: Changes the size of the point (or whatever).
+
+These different options are called 'aesthetics.' More info:
+<https://ggplot2.tidyverse.org/articles/ggplot2-specs.html>
+:::
+
+::: frame
+Plots with Pizazz
+
+    ggplot(df, aes(x=mad_gdppc, y=bicc_gmi)) + 
+    geom_point(size=3, color="blue", shape=2) + 
+    labs(y="Militarization", x="Median GDP per Capita", 
+    title="Militarization vs GDP per Capita")
+
+![image](images/plot_4.png){width=".8\\textwidth"}
+:::
+
+::: frame
+Now you Time to add pizazz
+
+-   `color="red"`: Changes the color of the point (or the outline of the
+    bar).
+
+-   `fill="green"`: Changes the inside color (if relevant)
+
+-   `shape=2`: Changes the shape of the point.
+
+-   `size=4`: Changes the size of the point (or whatever).
+:::
+
+::: frame
+Showing more information
+
+-   What if we want to show more than just two variables?
+
+-   We can use those different aesthetics to show other information by
+    assigning them a variable.
+
+-   Place the relevant aesthetic within the `aes()` call.
+
+From:
+
+    ggplot(data, aes(x=var1, y=var2)) + geom_line(color="red")
+
+To:
+
+    ggplot(data, aes(x=var1, y=var2, color=var3)) + geom_line()
+:::
+
+::: frame
+Showing more information
+
+    ggplot(df, aes(x=mad_gdppc, y=bicc_gmi)) + 
+    geom_point(aes(color=bmr_dem)) + 
+    theme_minimal() +
+    labs(y="Militarization", x="Median GDP per Capita", 
+    title="Militarization vs GDP per Capita")
+
+![image](images/plot_5.png){width=".8\\textwidth"}
+:::
+
+::: frame
+Now you Pick a categorical variable in your data and add that
+information to your plot.
+:::
+
+::: frame
+Improving Readability There are a few more things we can do:
+
+-   I don't like the red and teal colors (they aren't very colorblind
+    friendly either).
+
+-   On the x-axis a lot of the data is scrunched close to 0, with a few
+    trailing out.
+
+-   Entirely stylistic: I hate the grey blocks.
+:::
+
+::: frame
+Improving Readability
+
+-   `scale_color_brewer()`: Used to change the colors used by the color
+    aesthetic.
+
+-   `scale_x_log10()`: Changes the x axis to use a log scale.
+
+-   `theme_minimal()`: An alternative theme for the plot.
+:::
+
+::: frame
+Improving Readability
+
+    ggplot(df, aes(x=mad_gdppc, y=bicc_gmi)) + 
+    geom_point(aes(color=bmr_dem)) + 
+    scale_color_brewer("Democracy?", type = "qual", palette = 3) + 
+    scale_x_log10() +
+    theme_minimal() +
+    labs(y="Militarization", x="Median GDP per Capita", 
+    title="Militarization vs GDP per Capita")
+
+![image](images/plot_6.png){width=".75\\textwidth"}
+:::
+
+::: frame
+Saving plots Two ways:
+
+-   Export button at the top of the plot window.,
+
+-   Using `ggsave()`
+
+```{=html}
+<!-- -->
+```
+    p <- ggplot(df, aes(x=mad_gdppc, y=bicc_gmi)) + 
+    geom_point(aes(color=bmr_dem)) + 
+    scale_color_brewer("Democracy?", type = "qual", palette = 3) + 
+    scale_x_log10() +
+    theme_minimal() +
+    labs(y="Militarization", x="Median GDP per Capita", 
+    title="Militarization vs GDP per Capita")
+    ggsave(p, filename="plot_6.png", height=5, width=7, units="in")
+:::
+
+::: frame
+Last note We can save and add to a plot:
+
+    p <- ggplot(df, aes(x=mad_gdppc, y=bicc_gmi)) + 
+    geom_point(aes(color=bmr_dem)) 
+    p <- p + scale_color_brewer("Democracy?", type = "qual", 
+                    palette = 3) 
+    p <- p + scale_x_log10() 
+    p <- p + theme_minimal() 
+    p <- p + labs(y="Militarization", x="Median GDP per Capita", 
+    title="Militarization vs GDP per Capita")
+    p
+:::
+
+::: frame
+Getting help
+
+-   References/tutorials: https://ggplot2.tidyverse.org/
+
+-   Book that discusses principles of data viz and ggplot2:
+    https://socviz.co/
+:::
+
+::: frame
+:::
+
+::: frame
+General principles: Less is usually more
+
+Less is usually more
+
+-   Plots don't need to have a lot of bells and whistle.
+
+-   You are should direct attention to what is important.
+
+-   At the same time\...
+
+    -   Everything should have a label
+
+    -   You can use grid lines to highlight (relevant) differences
+:::
+
+::: frame
+General principles: Follow assumptions
+
+People have assumptions about how plots work, don't break them.
+
+::: center
+![image](images/gun_violence.jpg){height=".8\\textheight"}
+:::
+:::
+
+::: frame
+General principles: Follow assumptions
+
+People have assumptions about how plots work, don't break them.
+
+-   If one of the variables is time, it usually is on the x-axis.
+
+-   The further you are from the bottom left the higher the number.
+
+-   The axis are continuous (and often linear)
+:::
+
+::: frame
+General principles: Follow assumptions
+![image](images/flipped_1.png){height="\\textheight"}
+:::
+
+::: frame
+General principles: Follow assumptions
+![image](images/flipped_2.png){width="\\textwidth"}
+:::
+
+::: frame
+General principles: Make it clear
+
+Make it clear to the viewer what they are supposed to take away from it.
+
+-   If they should look at trends, add a trend line
+
+-   If they are making comparisons across groups put those groups
+    together
+:::
+
+::: frame
+General principles: Make it clear
+![image](images/comparisons_1.png){width=".8\\textwidth"}
+:::
+
+::: frame
+General principles: Make it clear
+![image](images/comparisons_2.png){width="\\textwidth"}
+:::
+
+::: frame
+Local Party Social Media
+
+-   Interested in how local parties in the US use social media.
+
+-   Collected social media info for  6,000 local parties.
+
+-   Used Crowdtangle to download all their facebook posts from 2016 to
+    2021.
+
+-   Dataset contained 3,907,203 posts with 26 variables per post.
+
+Co-Authors: Anne Whitesell (Miami University); Lee A. Hannah (Wright
+State University)
+:::
+
+::: frame
+Social Media Data Social media data can be very interesting:
+
+-   We have the text of the posts.
+
+-   We have the reactions to the post (number of likes, comments,
+    shares)
+
+-   We have the *exact* time the post was made.
+:::
+
+::: frame
+Starting One place to start: Overtime trends in interactions.
+
+-   Calculate daily number of posts.
+
+-   Calculate the average number of reactions per post per day.
+:::
+
+::: frame
+Code
+
+    p1 <- ggplot(tmp, aes(x=lubridate, y=N, fill=Party, 
+        color=Party, shape=Party)) + 
+        geom_point(alpha=.2) + geom_smooth(size=1,method = loess,
+        method.args=list("span" =.5)) + 
+        theme_minimal() + 
+        scale_y_continuous(labels = scales::label_comma()) + 
+        scale_color_manual("Party",
+        values=col_pal)  + 
+        scale_fill_manual(values=col_pal) + 
+        # geom_vline(xintercept = lubridate::as_date("2020-11-03"), linetype="dashed") + 
+        labs(y="Number of Posts", x="")
+:::
+
+::: frame
+Plot of Posts ![image](images/all_posts.png){width=".7\\textwidth"}
+:::
+
+::: frame
+Full Plot ![image](images/all_posts.png){width=".9\\textwidth"}
+:::
