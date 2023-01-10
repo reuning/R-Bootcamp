@@ -186,8 +186,8 @@ Modifying and then saving a variable as itself can lead to mistakes so be carefu
 
 There are two base types of variables you can use:
 
-- Numeric/Doubles: These are just numbers. `miami <- 4`
-- Strings: This is anything as long as it is surrounded by `" "` (quotation marks). `miami <- "Miami"` 
+- Numeric/Doubles: These are just numbers. You don't include a commas just numbers. 
+- Strings: This is anything as long as it is surrounded by `" "` (quotation marks).
 
 . . . 
 
@@ -288,6 +288,8 @@ vol
 
 Functions in R take the form of `function(X, Y, Z)` where `function` is the function, and `X, Y, X` are a bunch of arguments that give the function an input and/or tell it what specifically to do.
 
+. . . 
+
 ```{R}
 precinct_voters <- c(123,44,32,67)
 sum(precinct_voters)
@@ -342,62 +344,118 @@ The manual itself will appear on the bottom right pane.
 
 ## Reading the Manual 
 
-## Functions and Arguments 
+The manual can be hard to read at first. A few tips:
 
-Almost all functions have more arguments than
-you need to set, as they have defaults. The default for `na.rm` is
-always FALSE. If you do not change this when you call it, it will assume
-that is what you want:
+- The **Description** is often very general (to a point of sometimes not being useful). 
+- The **Usage** shows all the arguments and their defaults (if they have any). There is more info about the arguments in the **Arguments** section
+- At the very bottom there is usually an **Examples** section. You can often copy these into the script pane, run them, and see what happens. 
 
-            > vec <- c(1,4,1,NA)
-            > sum(vec)
-            [1] NA
-            > sum(vec, na.rm=TRUE)
-            [1] 6
-            > sum(vec, na.rm=FALSE)
-            [1] NA
 
-## Functions and Arguments 
 
-Of course you do not know what the defaults are,
-or even what the function arguments are. R has a help you can call with
-`?sum`.
+# Libraries
 
-## Libraries
-
--   R is powerful/useful because anyone can extend it (add more functions).
--   Bundles of functions are called libraries/packages.
--   You can install a library with `install.package()` and then tell R you want to use it with `library`.
+- R is powerful/useful because anyone can extend it (add more functions).
+- Bundles of functions are called libraries/packages.
+- You can install a library with `install.package()` and then tell R you want to use it with `library`.
 
 ## Tidyverse
 
-- A lot of data science work is done using the tidyverse suite of packages.
-- We can install it with: `install.package("tidyverse")`
-- And load one package from it: `library(readr)`
+- A lot of data science work is done using the [tidyverse suite of packages.
+- We can install the entire suite using: `install.package()`
+
+Run: 
+```{.R}
+install.packages("tidyverse")
+```
+
+## Using a Package
+
+- To use a package you use the function `library()`. 
+- It is a norm to load all the packages you use in a script at the top of a script. 
 
 ## Loading Data
 - `readr` is a library used to load datasets.
 - We are going to start with loading it using Rstudio's interface.
-- In the bottom right you can navigate through files, find 'data.csv' and then click on it and select 'Import Dataset\...'
-
-## Import Dataset
-
-![](images/import_data.png){fig-align="center"}
 
 
--   You can select a bunch of options at the bottom.
--   On the bottom right it shows you the code to do what you want.
+. . .
+
+[Download this data](images/disability_comp.csv) and we are going to open it in R. It has data on the number veterans in each county recieving disability benefits. 
+
+## Importing Data with RStudio
+
+ - In the bottom right you can look through files, it shows the **working directory**. 
+ - You can change the **working directory** by going to Session $\rightarrow$ Set Working Directory $\rightarrow$ Choose Director\...
+ - Find 'disability_comp.csv', click on it and select 'Import Dataset\...' 
+
+---
+
+![](images/Day_1_Import.png){fig-align="center"}
+
+## Importing Data with just R
 
 
-## Accessing Data
+We can do the same thing but just using R: 
+```{R}
+library(readr) # load readr package
+setwd("~/Dropbox/Teaching_Kevin/Spring_2023/R Bootcamp/images") # Set working directory 
+df <- read_csv("disability_comp.csv")
+```
 
-Once you have a dataframe loaded you can access different variables (as
-vectors) by using the dollar sign.\
-For example: `df$ideology` will access the variable named 'ideology'
-from your dataframe.
+::: {.callout-note}
+Mac computers file paths start with `~/` and Windows start with `C:/`. 
 
+If you write `setwd("C:/") ` you can then hit tab and walk through the folders.
+:::
+
+
+
+## Looking at your data
+
+Once you have the data loaded start by just running the data by itself. It will show you the first 10 rows of data. 
+
+```{R}
+df
+```
+
+## Accessing individual columns 
+
+To access a specific column of data you'll use the `$`: `data$column`. 
+
+```{R}
+df$Total
+```
+
+. . .
+You can put this directly in a function like: 
+
+```{.R}
+mean(df$Total)
+```
 
 # Check
 
-Load the data we are using and see if you can calculate the mean of a variable (the function is `mean())`
+Pick two numeric variables and calculcate the mean, median and standard deviation for them. 
+
+The functions you'll need are: `mean()`, `median()` and `sd()`.
+
+::: {.callout-tip}
+There is missing data so you'll have to use the `na.rm=TRUE` argument. 
+:::
+
+# How I did it
+
+Total number of receipents: 
+```{R}
+mean(df$Total, na.rm=TRUE)
+median(df$Total, na.rm=TRUE)
+sd(df$Total, na.rm=TRUE)
+```
+
+Total number of male receipents:
+```{R}
+mean(df$Male, na.rm=TRUE)
+median(df$Male, na.rm=TRUE)
+sd(df$Male, na.rm=TRUE)
+```
 

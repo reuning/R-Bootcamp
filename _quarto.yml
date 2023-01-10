@@ -6,13 +6,8 @@ website:
   title: "Presentations"
   site-url: "https://kevinreuning.com/presentations/"
   google-analytics: "G-Q4HC79ZRBZ"
-  sidebar:
-    style: docked
-    contents:
-      - section: "Introduction to R"
-        contents:
-          - day_1.qmd
-          - day_2.qmd
+  sidebar: false
+  navbar: false
 
 format:
   html:

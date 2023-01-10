@@ -1,5 +1,9 @@
 ---
-title: ""
+title: "Tutorials"
 format: html
 author: ""
 ---
+
+
+## R Bootcamp:
+- [Introduction to R: Basics](day_1.qmd)
