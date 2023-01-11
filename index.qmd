@@ -6,4 +6,5 @@ author: ""
 
 
 ## R Bootcamp:
-- [Introduction to R: Basics](day_1.qmd)
+- [Basics](day_1.qmd)
+- [Data Wrangling and Summarizing](day_2.qmd)

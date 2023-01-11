@@ -4,12 +4,24 @@ author: "Kevin Reuning"
 format: revealjs
 ---
 
-## Goals for this Bootcamp 
+# Who am I
+
+- I'm Kevin Reuning (ROY-ning). 
+- I'm an Assistant Professor in Political Science. 
+
+# Goals for this Bootcamp 
+
+- Not be afraid of R/Rstudio
+- Able to load data in and calculate useful statistics with it. 
+- Make a variety of beautiful plots. 
 
 
-## Goals for Today
+# Goals for Today
 
-
+- Start using R and RStudio, realize you cannot break it. 
+- How to use R as a calculator. 
+- Understand the basics of variables and functions in R. 
+- Load data into R and calculate the average of different variables. 
 
 # R and RStudio
 
@@ -350,7 +362,14 @@ The manual can be hard to read at first. A few tips:
 - The **Usage** shows all the arguments and their defaults (if they have any). There is more info about the arguments in the **Arguments** section
 - At the very bottom there is usually an **Examples** section. You can often copy these into the script pane, run them, and see what happens. 
 
+## Some Other Functions:
 
+- mean()
+- median()
+- sd()
+- range()
+
+Take a moment now, and look at the manual of one of these functions. 
 
 # Libraries
 
