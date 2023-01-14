@@ -1,19 +1,15 @@
 ---
-title: "Introduction to R: Plotting"
+title: "Introduction to R: Data Manipulation and Summary"
 author: "Kevin Reuning"
 format: revealjs
 
 ---
 
-## Goals for this Bootcamp 
-
-
 ## Goals for Today
 
 - Manipulate data (filter specific rows, select columns).
-- Create summaries of different groups.
 - pipes
-
+- Summarizing data
 
 # Data for today 
 
@@ -140,14 +136,154 @@ val <- pi^(2/3)
 
 ## Multiple Checks in Filtering 
 
-Lets collect countries with 100 years of the same regime type where more than 5% of income goes to the top 1%
+Lets collect countries with 100 years of the same regime type where more than 10% of income goes to the top 1%
 
 ```{R}
-sub_df <- filter(df, bmr_demdur > 100 & top_top1_income_share > .5)
+sub_df <- filter(df, bmr_demdur > 100 & top_top1_income_share > .1)
 sub_df$cname
+```
+
+## Check 
+
+Create two new datasets.
+
+1. Only countries that have an income share greater than 25%
+2. Countries that have had the same regime type for 50 to 100 years. 
+
+## How I did it
+
+```{R}
+sub_df1 <- filter(df, top_top1_income_share > .25)
+sub_df1$cname
+```
+
+```{R}
+sub_df2 <- filter(df, bmr_demdur > 50 & bmr_demdur < 100)
+sub_df2$cname
 ```
 
 # Pipes %>% 
 
+Tidyverse syntax makes use of pipes to chain multiple functions together. 
 
+- You use the pipe operator (`%>%`) in between each step. 
+- This operator is like saying "take the output from the previous function and put it in the next function"
+
+. . . 
+
+For example (in pseudo-code): 
+
+`Output <- Step 1(Input) %>% Step 2() %>% Step 3()`
+
+**Translation**: Take the Input, apply Step 1 to it, then take the output of Step 1 and apply Step 2 to it, then take the output of Step 2 and apply Step 3 to it, and finally store the output of Step 3 as Output. 
+
+## Example 
+
+```{R}
+filter(df, bmr_demdur > 100 & top_top1_income_share > .1) %>% pull(cname)
+```
+
+What does the `pull()` function do? It is another way to access a certain column in your data. 
+
+. . . 
+
+### How else could we have done this? 
+
+```{R}
+pull(filter(df, bmr_demdur > 100 & top_top1_income_share > .1), cname)
+filter(df, bmr_demdur > 100 & top_top1_income_share > .1)$cname
+sub_df <- filter(df, bmr_demdur > 100 & top_top1_income_share > .1)
+sub_df$cname
+```
+
+## Limitations
+
+# Summarizing Data 
+
+One of the most useful tidyverse functions is `summarize()`.
+
+- `summarize()` transforms data by applying a function(s) to columns in the data. 
+- The first argument will be the data, the rest of the arguments will be functions you want to apply to it. 
+- The output will be a smaller data frame where the columns are the output from each function it applied. 
+
+## Simple Examples
+
+What if we want to figure out the mean regime type length for our data? 
+
+```{R}
+#| output-location: fragment
+summarize(df, mean(bmr_demdur))
+```
+
+. . .
+
+What if we want to calculate other statistics? 
+
+. . .
+
+```{R}
+summarize(df, mean(bmr_demdur), sd(bmr_demdur), median(bmr_demdur))
+```
+
+
+You generally want to use functions that only return 1 value. Why? 
+
+. . . 
+
+```{R}
+summarize(df, mean(bmr_demdur), sd(bmr_demdur), median(bmr_demdur), range(bmr_demdur))
+```
+
+## Filtering and Summarizing 
+
+What if we want to figure out the average income share for the top 1% for countries that have been around for more than 100 years? 
+
+```{R}
+#| output-location: fragment
+df %>% filter(bmr_demdur > 100) %>% summarize(mean(top_top1_income_share))
+```
+
+. . .
+
+We can improve the output by changing the column name: `summarize(col_name = mean(variable))`
+
+```{R}
+df %>% filter(bmr_demdur > 100) %>% summarize(mean = mean(top_top1_income_share))
+```
+
+. . . 
+
+There is also a function specifically for the number of observations: `n()`
+
+```{R}
+df %>% filter(bmr_demdur > 100) %>% summarize(n())
+```
+
+## Check 
+
+Find the mean and median regime type duration for countries that have more than 0.05 of their income going to the top 1%. Include the number of observations as well. 
+
+Then find the mean and median GDP per capita (`mad_gdppc`) along with the number of observations for countries with a regime type duration of less than 50 years. _There are missing values in this variable, what do we do to ignore them?_
+
+## My Solutions 
+
+```{R}
+df %>% filter(top_top1_income_share > .05) %>% 
+    summarize(mean=mean(bmr_demdur), median=median(bmr_demdur))
+```
+
+. . .
+
+```{R}
+df %>% filter(bmr_demdur < 50) %>% 
+    summarize(mean=mean(mad_gdppc, na.rm=T), 
+              median=median(mad_gdppc, na.rm=T),
+              n=n())
+```
+
+::: callout-note
+You can use multiple lines with pipes, it is common to put the pipe at the end of each line and indent the next line. 
+:::
+
+# Grouping
 
