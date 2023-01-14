@@ -142,10 +142,10 @@
   categories: [economy, development]
   source: World Economic Forum
 
-- variable: 
+- variable: Scientific publications
   name: wef_sp
   description: |
-    Scientific publications. H Index. Score on an index measuring the number of publications and their citations, expressed at the country level. Original sources: SCImago.
+    Score on an index measuring the number of publications and their citations, expressed at the country level. Original sources: SCImago.
   type: Interval
   categories: [education, economy]
   source: World Economic Forum

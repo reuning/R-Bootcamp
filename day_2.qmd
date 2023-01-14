@@ -12,16 +12,37 @@ format: revealjs
 
 - Manipulate data (filter specific rows, select columns).
 - Create summaries of different groups.
-- Merging data together
 - pipes
 
 
 # Data for today 
 
+Today we are going to use a subset of country data from [The Quality of Governance Institute](https://www.gu.se/en/quality-government/qog-data).
+
+- Download the [data we'll be using here](images/country_data.csv)
+- You can open it with `read_csv()` and if you need more help check out the [first day of slides.](day_1.qmd)
+
+
+```{R}
+library(readr)
+setwd("images")
+df <- read_csv("country_data.csv")
+```
+
+
+
+## Variables
+
+There is a description of all the [variables I've included here.](pages/country_data.qmd) 
+
+For now though we are going to use a few of them: 
+
+- `bmr_demdur` is how long the country has been in the same regime type category
+- `top_top1_income_share` is the proportion of income that goes to the top 1%. 
+
 # Filtering Data 
 
 Often you want to select just specific rows of data that meet certain requirements. 
-
 
 
 ## Logical Checks 
@@ -49,9 +70,48 @@ names <- c("Kevin", "Anne", "Sophie")
 names == "Kevin"
 ```
 
-## Logical Checks on Data 
+## Logical Checks with Data 
+
+We can do the same thing but using a variable from our dataset: 
+
+```{R}
+## Returns true if dem_dur (regime type length) is more than 100.
+df$bmr_demdur > 100 
+```
+
+## Filtering Data 
+
+We can use logical checks to filter our data. 
+
+- The `filter()` function is part of the **plyr** package in the **tidyverse**. 
+- The first argument will be the data you want to filter. 
+- The second argument will be the logical check.  
+
+::: {.callout-note}
+Within the `filter()` call you do not need to use `data$` before the variable name, it already knows you are using the data you put in the first argument.
+:::
+
+## Filtering Data - Example 
+
+```{R}
+library(tidyverse)
+
+# df <- read_csv("country_data.csv") ## remember I did this already
+filter(df, bmr_demdur>100)
+```
+
+. . . 
+
+If we want we can save the new data as well: 
+
+```{.R}
+sub_df <- filter(df, bmr_demdur>100)
+```
 
 
+# Checking Multiple Things 
+
+What about if we want to check if our rows meet multiple condition? Then we need **logical operators**. 
 
 ## Logical Operators
 - We have **and** and **or** operators to check multiple logical values. 
@@ -78,8 +138,16 @@ val <- pi^(2/3)
 (val < 1) | (val > 4) # Is it less than 0 or greater than 4?
 ```
 
+## Multiple Checks in Filtering 
 
-## Pipes %>% 
+Lets collect countries with 100 years of the same regime type where more than 5% of income goes to the top 1%
 
-One issue that you
+```{R}
+sub_df <- filter(df, bmr_demdur > 100 & top_top1_income_share > .5)
+sub_df$cname
+```
+
+# Pipes %>% 
+
+
 

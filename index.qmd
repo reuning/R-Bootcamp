@@ -10,4 +10,4 @@ author: ""
 - [Data Wrangling and Summarizing](day_2.qmd)
 
 ## Data
-- R Bootcamp Country data: [data](images/country_data.csv) and [variable table](pages/county_data.qmd)
+- R Bootcamp Country data: [data](images/country_data.csv) and [variable table](pages/country_data.qmd)

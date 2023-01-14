@@ -15,6 +15,7 @@ format:
     css: styles.css
   revealjs: 
     df-print: tibble
+    theme: [default, custom_pres.scss]
     execute:
         echo: true
 
