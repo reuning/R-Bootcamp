@@ -226,7 +226,7 @@
 - variable: Typology of political institutions
   name: br_elect
   description: |
-    Alternative democracy indicator capturing degree of multi-party competition. (No elections=0, Single-party elections=1, non-democratic multi-party elections=2, democratic elections= 3.
+    Alternative democracy indicator capturing degree of multi-party competition. (No elections=0, Single-party elections=1, non-democratic multi-party elections=2, democratic elections= 3).
   type: Binary
   categories: [governance, elections]
   source: Bjornskov and Rode

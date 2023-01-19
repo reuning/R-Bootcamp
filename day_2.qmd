@@ -110,6 +110,7 @@ sub_df <- filter(df, bmr_demdur>100)
 What about if we want to check if our rows meet multiple condition? Then we need **logical operators**. 
 
 ## Logical Operators
+- We can reverse a logical value with `!` (e.g. `!TRUE == FALSE`) 
 - We have **and** and **or** operators to check multiple logical values. 
     - **and** is `&`
     - **or** is `|` (shift + backslash)
@@ -286,4 +287,101 @@ You can use multiple lines with pipes, it is common to put the pipe at the end o
 :::
 
 # Grouping
+
+Often we want to provide summaries of groups within the data. For example: how does the GDP vary by type of political regime? 
+
+Here we'll use the `group_by()` function to create groups of our data. 
+
+## `group_by()` alone
+
+`group_by()` expects variable(s) that you want to use to group your dataset: 
+
+```{R}
+df %>% group_by(br_elect) 
+```
+
+Only change is the addition of **# Groups: by_elect [5]** (grouping variable, and number of groups). 
+
+## Group and Summarize
+
+Lets chain together `group_by()` and `summarize()`
+
+```{R}
+df %>% group_by(br_elect) %>% 
+    summarize(mean=mean(mad_gdppc, na.rm=T), n = n())
+```
+
+. . . 
+
+What is ugly about this? 
+
+## Adding in Filtering 
+
+`is.na()` checks if something is missing or not. 
+
+```{R}
+df %>% filter(!is.na(br_elect)) %>% 
+    group_by(br_elect) %>% 
+    summarize(mean=mean(mad_gdppc, na.rm=T), n = n())
+```
+
+::: callout-tip
+The `drop_na( )` tidyverse function can replace `filter(!is.na( ))`
+:::
+
+## Check 
+
+There are several variables that can be used to group countries. Pick one of them, pick an interval variable that you think might vary by the group, and then calculate the number of observations, mean, and median for each group. 
+
+## My Solution 
+
+- Grouping variable: `br_pvote`
+- Interval variable: `van_part`
+- Expectation: Countries with proportional representation (1) will have higher participation
+
+```{.R code-line-numbers="1"}
+df %>% 
+    drop_na(br_pvote) %>% 
+    group_by(br_pvote) %>%
+    summarize(n=n(), mean=mean(van_part, na.rm=T),
+            median=median(van_part, na.rm=T))
+```
+
+Data that I am using
+
+## My Solution 
+
+- Grouping variable: `br_pvote`
+- Interval variable: `van_part`
+- Expectation: Countries with proportional representation (1) will have higher participation
+
+```{.R code-line-numbers="2"}
+df %>% 
+    drop_na(br_pvote) %>% 
+    group_by(br_pvote) %>%
+    summarize(n=n(), mean=mean(van_part, na.rm=T),
+            median=median(van_part, na.rm=T))
+```
+
+Filtering out observations that are missing a value for `br_pvote`
+
+
+## My Solution 
+
+- Grouping variable: `br_pvote`
+- Interval variable: `van_part`
+- Expectation: Countries with proportional representation (1) will have higher participation
+
+```{.R code-line-numbers="3"}
+df %>% 
+    drop_na(br_pvote) %>% 
+    group_by(br_pvote) %>%
+    summarize(n=n(), mean=mean(van_part, na.rm=T),
+            median=median(van_part, na.rm=T))
+```
+
+Grouping the data frame by `br_pvote`
+
+
+
 

@@ -20,6 +20,46 @@ df  <- read_csv("images/qog_bas_cs_jan22.csv")
 # Data for Today 
 
 
+
+
+
+## Changing variables: `mutate()`
+
+If we want to change the values of a variable we use `mutate()`
+
+General format: 
+
+``mutate(new_var = f(old_var))`` 
+
+. . . 
+
+What function though? `br_elect` is a small set of numbers where each represent a category. This is a factor.  
+
+## Applying `factor()`
+
+`factor()` creates a factor, with a certain set of numeric levels, and labels. 
+
+```{R}
+df %>% mutate(br_elect_label = 
+        factor(br_elect, levels=c(0, 1, 2, 3), 
+                labels=c("None", "Single-party", 
+                "Non-dem multi-party", "Democratic"))) %>%
+    pull(br_elect_label)
+```
+
+## Making better labels
+
+
+```{R}
+df %>% filter(!is.na(br_elect)) %>% 
+    mutate(br_elect_label = 
+            factor(br_elect, levels=c(0, 1, 2, 3), 
+                    labels=c("None", "Single-party", 
+                    "Non-dem multi-party", "Democratic"))) %>% 
+    group_by(br_elect_label) %>% 
+    summarize(mean=mean(mad_gdppc, na.rm=T), n = n())
+```
+
 # Tidyverse: ggplot2
 
 -   ggplot2 is another tidyverse package that is commonly used to make plots.

@@ -200,6 +200,7 @@ There are two base types of variables you can use:
 
 - Numeric/Doubles: These are just numbers. You don't include a commas just numbers. 
 - Strings: This is anything as long as it is surrounded by `" "` (quotation marks).
+- Factors: This is a combination of the two and we'll discuss it more later. 
 
 . . . 
 

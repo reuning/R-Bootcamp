@@ -14,7 +14,7 @@ format:
     theme: cosmo
     css: styles.css
   revealjs: 
-    df-print: tibble
+    df-print: default
     theme: [default, custom_pres.scss]
     execute:
         echo: true
