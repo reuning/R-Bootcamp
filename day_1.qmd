@@ -447,9 +447,10 @@ df$Total
 ```
 
 . . .
+
 You can put this directly in a function like: 
 
-```{.R}
+```{R}
 mean(df$Total)
 ```
 

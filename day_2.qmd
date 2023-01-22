@@ -186,7 +186,6 @@ filter(df, bmr_demdur > 100 & top_top1_income_share > .1) %>% pull(cname)
 
 What does the `pull()` function do? It is another way to access a certain column in your data. 
 
-. . . 
 
 ### How else could we have done this? 
 
@@ -226,6 +225,7 @@ What if we want to calculate other statistics?
 summarize(df, mean(bmr_demdur), sd(bmr_demdur), median(bmr_demdur))
 ```
 
+## Caution - Multiple Return Values
 
 You generally want to use functions that only return 1 value. Why? 
 
@@ -252,7 +252,7 @@ We can improve the output by changing the column name: `summarize(col_name = mea
 df %>% filter(bmr_demdur > 100) %>% summarize(mean = mean(top_top1_income_share))
 ```
 
-. . . 
+## Number of Observations 
 
 There is also a function specifically for the number of observations: `n()`
 
@@ -381,6 +381,24 @@ df %>%
 ```
 
 Grouping the data frame by `br_pvote`
+
+
+
+## My Solution 
+
+- Grouping variable: `br_pvote`
+- Interval variable: `van_part`
+- Expectation: Countries with proportional representation (1) will have higher participation
+
+```{.R code-line-numbers="4-5"}
+df %>% 
+    drop_na(br_pvote) %>% 
+    group_by(br_pvote) %>%
+    summarize(n=n(), mean=mean(van_part, na.rm=T),
+            median=median(van_part, na.rm=T))
+```
+
+Summarizing (number of observations, mean of `van_part`, median of `van_part`)
 
 
 

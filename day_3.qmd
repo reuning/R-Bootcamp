@@ -1,6 +1,5 @@
 ---
 title: "Introduction to R: Plotting"
-author: "Kevin Reuning"
 format: revealjs
 
 ---
@@ -10,18 +9,52 @@ format: revealjs
 library(readr)
 df  <- read_csv("images/qog_bas_cs_jan22.csv")
 ```
-## Goals for this Bootcamp 
-
 
 ## Goals for Today
 
-
+- Understand how to make a variety of basic plots (scatter and bar)
+- Manipulate data (relabeling)
+- Export graphs
 
 # Data for Today 
 
+Today we are going to keep using a subset of country data from [The Quality of Governance Institute](https://www.gu.se/en/quality-government/qog-data).
+
+- Download the [data we'll be using here](images/country_data.csv)
+- You can open it with `read_csv()` and if you need more help check out the [first day of slides.](day_1.qmd)
+
+```{R}
+library(readr)
+setwd("images")
+df <- read_csv("country_data.csv")
+```
+
+
+## Variables
+
+There is a description of all the [variables I've included here.](pages/country_data.qmd) 
+
+For now though we are going to use a few of them: 
+
+- `bmr_demdur` is how long the country has been in the same regime type category
+- `top_top1_income_share` is the proportion of income that goes to the top 1%. 
 
 
 
+# **ggplot2** Introduction 
+
+We are going to use another library today: **ggplot2**
+
+ggplot2 is a system for declaratively creating graphics, based on The Grammar of Graphics. You provide the data, tell ggplot2 how to map variables to aesthetics, what graphical primitives to use, and it takes care of the details. ^[https://ggplot2.tidyverse.org/]
+
+```{R}
+library(tidyverse) # will load ggplot2 as well 
+#library(ggplot2) # to just load ggplot 
+```
+
+# **ggplot2** Basics
+
+Every plot is going to start with a call to `ggplot()` with the arguments that identify the data you want to use and the **aesthetics** you want to use from that data. 
 
 ## Changing variables: `mutate()`
 
@@ -40,6 +73,7 @@ What function though? `br_elect` is a small set of numbers where each represent 
 `factor()` creates a factor, with a certain set of numeric levels, and labels. 
 
 ```{R}
+library(tidyverse)
 df %>% mutate(br_elect_label = 
         factor(br_elect, levels=c(0, 1, 2, 3), 
                 labels=c("None", "Single-party", 
