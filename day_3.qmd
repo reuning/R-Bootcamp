@@ -40,8 +40,9 @@ For now though we are going to use a few of them:
 - `top_top1_income_share` is the proportion of income that goes to the top 1%. 
 
 
+# **ggplot2** 
 
-# **ggplot2** Introduction 
+## **ggplot2** Introduction 
 
 We are going to use another library today: **ggplot2**
 
@@ -54,7 +55,7 @@ library(tidyverse) # will load ggplot2 as well
 
 # **ggplot2** Basics
 
-Every plot is going to start with a call to `ggplot()` with the arguments that identify the data you want to use and the **aesthetics** you want to use from that data. 
+Every plot is going to start with a call to `ggplot()` with the arguments that identify the data you want to use and the **aesthetics** you want to use from that data.
 
 ## Changing variables: `mutate()`
 

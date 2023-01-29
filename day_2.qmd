@@ -2,7 +2,8 @@
 title: "Introduction to R: Data Manipulation and Summary"
 author: "Kevin Reuning"
 format: revealjs
-
+revealjs-plugins:
+  - codefocus
 ---
 
 ## Goals for Today
@@ -339,67 +340,28 @@ There are several variables that can be used to group countries. Pick one of the
 - Interval variable: `van_part`
 - Expectation: Countries with proportional representation (1) will have higher participation
 
-```{.R code-line-numbers="1"}
+```{.R}
 df %>% 
     drop_na(br_pvote) %>% 
     group_by(br_pvote) %>%
     summarize(n=n(), mean=mean(van_part, na.rm=T),
             median=median(van_part, na.rm=T))
 ```
-
+::: {.fragment .current-only data-code-focus="1"}
 Data that I am using
+:::
 
-## My Solution 
-
-- Grouping variable: `br_pvote`
-- Interval variable: `van_part`
-- Expectation: Countries with proportional representation (1) will have higher participation
-
-```{.R code-line-numbers="2"}
-df %>% 
-    drop_na(br_pvote) %>% 
-    group_by(br_pvote) %>%
-    summarize(n=n(), mean=mean(van_part, na.rm=T),
-            median=median(van_part, na.rm=T))
-```
-
+::: {.fragment .current-only data-code-focus="2"}
 Filtering out observations that are missing a value for `br_pvote`
+:::
 
-
-## My Solution 
-
-- Grouping variable: `br_pvote`
-- Interval variable: `van_part`
-- Expectation: Countries with proportional representation (1) will have higher participation
-
-```{.R code-line-numbers="3"}
-df %>% 
-    drop_na(br_pvote) %>% 
-    group_by(br_pvote) %>%
-    summarize(n=n(), mean=mean(van_part, na.rm=T),
-            median=median(van_part, na.rm=T))
-```
-
+::: {.fragment .current-only data-code-focus="3"}
 Grouping the data frame by `br_pvote`
+:::
 
-
-
-## My Solution 
-
-- Grouping variable: `br_pvote`
-- Interval variable: `van_part`
-- Expectation: Countries with proportional representation (1) will have higher participation
-
-```{.R code-line-numbers="4-5"}
-df %>% 
-    drop_na(br_pvote) %>% 
-    group_by(br_pvote) %>%
-    summarize(n=n(), mean=mean(van_part, na.rm=T),
-            median=median(van_part, na.rm=T))
-```
-
+::: {.fragment data-code-focus="4-5"}
 Summarizing (number of observations, mean of `van_part`, median of `van_part`)
-
+:::
 
 
 

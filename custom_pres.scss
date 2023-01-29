@@ -8,5 +8,6 @@ $font-family-sans-serif: 'Fira Sans', sans-serif;
 $presentation-font-size-root: 36px;
 $font-family-monospace: 'Fira Code', monospace;
 
-$code-block-bg: #eaeaea;
-
+//$code-block-bg: #eaeaea;
+$code-block-bg: #fff;
+$code-block-border-color: darken($code-block-bg, 60%);
