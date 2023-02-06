@@ -18,7 +18,7 @@ listing:
     sort-ui: [source, type, variable]
 ---
 
-The below table describes the variables present in the [country data](images/country_data.csv) used in the R Bootcamp. This data is from the [Quality of Governance Institute](https://www.gu.se/en/quality-government/qog-data) Standard dataset. The descriptions below are from their codebook.  
+The below table describes the variables present in the [country data](../images/country_data.csv) used in the R Bootcamp. This data is from the [Quality of Governance Institute](https://www.gu.se/en/quality-government/qog-data) Standard dataset. The descriptions below are from their codebook.  
 
 ::: {#data-listing}
 :::

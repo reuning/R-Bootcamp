@@ -6,15 +6,45 @@ format: revealjs
 
 # Who am I
 
+:::: {.columns}
+
+::: {.column width="75%"}
 - I'm Kevin Reuning (ROY-ning). 
 - I'm an Assistant Professor in Political Science. 
+- Prior to grad school I had very little experience in coding. 
+:::
 
-# Goals for this Bootcamp 
+::: {.column width="25%"}
+![](images/profile.jpg){width="250" fig-align="right"}
+:::
+
+::::
+
+# Goals For this Bootcamp 
 
 - Not be afraid of R/Rstudio
 - Able to load data in and calculate useful statistics with it. 
 - Make a variety of beautiful plots. 
 
+## Where We Are Going
+
+```{r}
+#| echo: true
+#| fig-align: center
+#| output-location: slide
+library(tidyverse)
+setwd("images")
+df <- read_csv("country_data.csv")
+df %>% mutate(type = cut(fh_polity2,  breaks=c(0, 3, 7, 10), 
+                        labels=c("Autocracy", "Anocracy", "Democracy"))) %>% 
+    drop_na(type) %>%  ggplot(aes(y=wdi_afp, x=mad_gdppc)) + 
+    geom_smooth(method="lm", color='black') + 
+    geom_point(color='orangered3') + facet_wrap(~type) + 
+    scale_x_log10(labels=scales::label_dollar()) +
+    theme_minimal() + theme(strip.text=element_text(size=20)) + 
+    labs(y="Percent of Labor\nForce in Military", 
+    x="GDP per Capita\n(Log scale)") 
+```
 
 # Goals for Today
 
