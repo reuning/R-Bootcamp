@@ -106,7 +106,7 @@ The output will be immediately below it. This should be similar to how you'll ha
 
 # R as a calculator
 
-R can be used to add, subtract, multiply\... Type something similar in the Rscript pane, highlight it and then click "Run" 
+R can be used to add, subtract, multiply\... Type something similar in the RScript pane, highlight it and then click "Run" 
 
 ```{R}
 #| output-location: fragment
@@ -162,7 +162,7 @@ Spaces (or not) between things often don't matter
 ```
 
 ## Check
-At this point you should have RStudio open, and be able to type things in the Rscript pane and run it in the console pane below. Your screen will look something like this. 
+At this point you should have RStudio open, and be able to type things in the RScript pane and run it in the console pane below. Your screen will look something like this. 
 
 ![](images/Day_1_Rstudio_Calculator.png){fig-align="center"}
 
@@ -320,7 +320,7 @@ vol
 ```
 
 ```{R}
-rad <- c(4, 6, 8)
+rad <- c(3, 6, 8)
 vol <- pi * (rad^3) * (4/3)
 vol 
 ```
@@ -342,7 +342,7 @@ sum(precinct_voters)
 
 ::: {.callout-caution}
 
-Never have a space between the function name, and the parantheses.
+Never have a space between the function name, and the parentheses.
 
 ::: 
 
@@ -351,7 +351,7 @@ Never have a space between the function name, and the parantheses.
 `sum()` has an additional argument that you can use to tell R what to do with missing values. First, how does R no a value is missing? These are recorded as `NA`. 
 
 ```{R}
-precinct_voters <- c(123,44,32,67, NA) # missing the data for the last preinct 
+precinct_voters <- c(123,44,32,67, NA) # missing the data for the last precinct 
 precinct_voters * 1.2 # 20% population growth 
 ```
 
@@ -410,13 +410,15 @@ Take a moment now, and look at the manual of one of these functions.
 
 ## Tidyverse
 
-- A lot of data science work is done using the [tidyverse suite of packages.
+- A lot of data science work is done using the Tidyverse suite of packages.
 - We can install the entire suite using: `install.package()`
 
 Run: 
 ```{.R}
 install.packages("tidyverse")
 ```
+
+There might be a popup asking about installing things from "Source" you can hit no on it. 
 
 ## Using a Package
 
@@ -425,18 +427,19 @@ install.packages("tidyverse")
 
 ## Loading Data
 - `readr` is a library used to load datasets.
-- We are going to start with loading it using Rstudio's interface.
+- We are going to start with loading it using RStudio's interface.
 
 
 . . .
 
-[Download this data](images/disability_comp.csv) and we are going to open it in R. It has data on the number veterans in each county recieving disability benefits. 
+[Download this data](images/disability_comp.csv) and we are going to open it in R. It has data on the number veterans in each county receiving disability benefits. 
 
 ## Importing Data with RStudio
 
- - In the bottom right you can look through files, it shows the **working directory**. 
- - You can change the **working directory** by going to Session $\rightarrow$ Set Working Directory $\rightarrow$ Choose Director\...
- - Find 'disability_comp.csv', click on it and select 'Import Dataset\...' 
+- In the bottom right you can look through files, it shows the **working directory**. 
+- You can change the **working directory** by going to Session $\rightarrow$ Set Working Directory $\rightarrow$ Choose Directory...
+- Find 'disability_comp.csv', click on it and select 'Import Dataset...' 
+- The first time you do this there might again be a popup asking you to install something, click "Yes" on this one. 
 
 ---
 
@@ -486,7 +489,7 @@ mean(df$Total)
 
 # Check
 
-Pick two numeric variables and calculcate the mean, median and standard deviation for them. 
+Pick two numeric variables and calculate the mean, median and standard deviation for them. 
 
 The functions you'll need are: `mean()`, `median()` and `sd()`.
 
@@ -496,14 +499,14 @@ There is missing data so you'll have to use the `na.rm=TRUE` argument.
 
 # How I did it
 
-Total number of receipents: 
+Total number of recipients: 
 ```{R}
 mean(df$Total, na.rm=TRUE)
 median(df$Total, na.rm=TRUE)
 sd(df$Total, na.rm=TRUE)
 ```
 
-Total number of male receipents:
+Total number of male recipients:
 ```{R}
 mean(df$Male, na.rm=TRUE)
 median(df$Male, na.rm=TRUE)
