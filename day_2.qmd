@@ -20,7 +20,7 @@ Today we are going to use a subset of country data from [The Quality of Governan
 - You can open it with `read_csv()` and if you need more help check out the [first day of slides.](day_1.qmd)
 
 
-```{R}
+```{r}
 library(readr)
 setwd("images")
 df <- read_csv("country_data.csv")
@@ -30,7 +30,7 @@ df <- read_csv("country_data.csv")
 
 ## Variables
 
-There is a description of all the [variables I've included here.](pages/country_data.qmd) 
+There is a description of all the [variables I've included here.](https://kevinreuning.com/presentations/pages/country_data.html) 
 
 For now though we are going to use a few of them: 
 
@@ -52,7 +52,7 @@ We need to include some more operators to do this:
 
 . . .
 
-```{R}
+```{r}
 43 < 4
 (4*pi)^2 > 5
 ```
@@ -62,7 +62,7 @@ We need to include some more operators to do this:
 - The output from these checks is another form of variable called a **logical**. 
 - We can have vectors of logical values
 
-```{R}
+```{r}
 names <- c("Kevin", "Anne", "Sophie")
 names == "Kevin"
 ```
@@ -71,7 +71,7 @@ names == "Kevin"
 
 We can do the same thing but using a variable from our dataset: 
 
-```{R}
+```{r}
 ## Returns true if dem_dur (regime type length) is more than 100.
 df$bmr_demdur > 100 
 ```
@@ -90,7 +90,7 @@ Within the `filter()` call you do not need to use `data$` before the variable na
 
 ## Filtering Data - Example 
 
-```{R}
+```{r}
 library(tidyverse)
 
 # df <- read_csv("country_data.csv") ## remember I did this already
@@ -131,7 +131,7 @@ All would return `TRUE`
 
 We can then combine logical checks together.
 
-```{R}
+```{r}
 val <- pi^(2/3)
 (val < 1) | (val > 4) # Is it less than 0 or greater than 4?
 ```
@@ -140,7 +140,7 @@ val <- pi^(2/3)
 
 Lets collect countries with 100 years of the same regime type where more than 10% of income goes to the top 1%
 
-```{R}
+```{r}
 sub_df <- filter(df, bmr_demdur > 100 & top_top1_income_share > .1)
 sub_df$cname
 ```
@@ -154,12 +154,12 @@ Create two new datasets.
 
 ## How I did it
 
-```{R}
+```{r}
 sub_df1 <- filter(df, top_top1_income_share > .25)
 sub_df1$cname
 ```
 
-```{R}
+```{r}
 sub_df2 <- filter(df, bmr_demdur > 50 & bmr_demdur < 100)
 sub_df2$cname
 ```
@@ -181,23 +181,29 @@ For example (in pseudo-code):
 
 ## Example 
 
-```{R}
+```{r}
 filter(df, bmr_demdur > 100 & top_top1_income_share > .1) %>% pull(cname)
 ```
 
 What does the `pull()` function do? It is another way to access a certain column in your data. 
 
 
-### How else could we have done this? 
+## How else could we have done this? 
 
-```{R}
+```{r}
 pull(filter(df, bmr_demdur > 100 & top_top1_income_share > .1), cname)
 filter(df, bmr_demdur > 100 & top_top1_income_share > .1)$cname
 sub_df <- filter(df, bmr_demdur > 100 & top_top1_income_share > .1)
 sub_df$cname
 ```
 
-## Limitations
+## A Note of Caution 
+
+- The `%>%` has been around for a while in the tidyverse. 
+- R recently added its own version of this to base R BUT they use `|>` instead. 
+- In most cases `%>%` is the same as `|>` 
+
+Yes this is all kind of silly and strange. 
 
 # Summarizing Data 
 
@@ -211,7 +217,7 @@ One of the most useful tidyverse functions is `summarize()`.
 
 What if we want to figure out the mean regime type length for our data? 
 
-```{R}
+```{r}
 #| output-location: fragment
 summarize(df, mean(bmr_demdur))
 ```
@@ -222,7 +228,7 @@ What if we want to calculate other statistics?
 
 . . .
 
-```{R}
+```{r}
 summarize(df, mean(bmr_demdur), sd(bmr_demdur), median(bmr_demdur))
 ```
 
@@ -232,7 +238,7 @@ You generally want to use functions that only return 1 value. Why?
 
 . . . 
 
-```{R}
+```{r}
 summarize(df, mean(bmr_demdur), sd(bmr_demdur), median(bmr_demdur), range(bmr_demdur))
 ```
 
@@ -240,7 +246,7 @@ summarize(df, mean(bmr_demdur), sd(bmr_demdur), median(bmr_demdur), range(bmr_de
 
 What if we want to figure out the average income share for the top 1% for countries that have been around for more than 100 years? 
 
-```{R}
+```{r}
 #| output-location: fragment
 df %>% filter(bmr_demdur > 100) %>% summarize(mean(top_top1_income_share))
 ```
@@ -249,7 +255,7 @@ df %>% filter(bmr_demdur > 100) %>% summarize(mean(top_top1_income_share))
 
 We can improve the output by changing the column name: `summarize(col_name = mean(variable))`
 
-```{R}
+```{r}
 df %>% filter(bmr_demdur > 100) %>% summarize(mean = mean(top_top1_income_share))
 ```
 
@@ -257,7 +263,7 @@ df %>% filter(bmr_demdur > 100) %>% summarize(mean = mean(top_top1_income_share)
 
 There is also a function specifically for the number of observations: `n()`
 
-```{R}
+```{r}
 df %>% filter(bmr_demdur > 100) %>% summarize(n())
 ```
 
@@ -269,14 +275,14 @@ Then find the mean and median GDP per capita (`mad_gdppc`) along with the number
 
 ## My Solutions 
 
-```{R}
+```{r}
 df %>% filter(top_top1_income_share > .05) %>% 
     summarize(mean=mean(bmr_demdur), median=median(bmr_demdur))
 ```
 
 . . .
 
-```{R}
+```{r}
 df %>% filter(bmr_demdur < 50) %>% 
     summarize(mean=mean(mad_gdppc, na.rm=T), 
               median=median(mad_gdppc, na.rm=T),
@@ -297,7 +303,7 @@ Here we'll use the `group_by()` function to create groups of our data.
 
 `group_by()` expects variable(s) that you want to use to group your dataset: 
 
-```{R}
+```{r}
 df %>% group_by(br_elect) 
 ```
 
@@ -307,7 +313,7 @@ Only change is the addition of **# Groups: by_elect [5]** (grouping variable, an
 
 Lets chain together `group_by()` and `summarize()`
 
-```{R}
+```{r}
 df %>% group_by(br_elect) %>% 
     summarize(mean=mean(mad_gdppc, na.rm=T), n = n())
 ```
@@ -320,7 +326,7 @@ What is ugly about this?
 
 `is.na()` checks if something is missing or not. 
 
-```{R}
+```{r}
 df %>% filter(!is.na(br_elect)) %>% 
     group_by(br_elect) %>% 
     summarize(mean=mean(mad_gdppc, na.rm=T), n = n())
@@ -364,4 +370,92 @@ Summarizing (number of observations, mean of `van_part`, median of `van_part`)
 :::
 
 
+# Saving Results 
+
+There are two ways to save our summary results. Both can be helpful depending on what you are doing:
+
+- `write_csv()`: Writes to a CSV file. 
+- Creating an exportable table. 
+
+## Huxtable 
+
+We are going to install one more package: [huxtable](https://hughjonesd.github.io/huxtable/index.html) (`install.packages("huxtable")`)
+
+The huxtable package is a _a lot_ so we are not going to get to it all but iet lets you do a lot of things:
+
+- Convert dataframe into a table. 
+- Format tables (borders, colors, alignment)
+- Export that table in a lot of formats (html, docx, excel, latex...)
+
+## Get a Table to Export
+
+```{r}
+tab_out <- df %>% 
+    drop_na(br_pvote) %>% 
+    group_by(br_pvote) %>%
+    summarize(n=n(), mean=mean(van_part, na.rm=T),
+            median=median(van_part, na.rm=T))
+```
+
+## Using Huxtable {auto-animate=true}
+
+The function `hux()` will create a table object that we can then modify. Lets see what happens when we make a table. 
+
+```{r}
+library(huxtable)
+ht <- hux(tab_out)
+ht
+```
+
+## Using Huxtable {auto-animate=true}
+
+We can then modify the style by pipping it into functions like a `theme_basic()` function and `set_align()`
+
+```{r}
+library(huxtable)
+ht <- hux(tab_out) %>% theme_basic() %>%
+    set_align(2:3, 1, "center") # 2:3 is the rows, 1 the columns to modify.
+ht
+```
+
+## Using Huxtable {auto-animate=true}
+
+Finally we can modify values using the `set_contents()` function
+
+```{r}
+library(huxtable)
+ht <- hux(tab_out) %>% theme_basic() %>%
+    set_align(2:3, 1, "center") %>%
+    set_contents(1, 1:4, 
+    c("Prop Voting?", "N", "Mean", "Median")) %>%
+    set_contents(2:3, 1, c("No", "Yes"))
+ht
+```
+
+
+## Saving the Document 
+
+And now we export it with `quick_docx()`
+
+```{r}
+quick_docx(ht, file="images/My First Summary Table.docx")
+```
+
+You can [download my file if you want](images/My%20First%20Summary%20Table.docx)
+
+## Huxtable Options and Check
+
+There are a lot of options to modify your table [here](https://hughjonesd.github.io/huxtable/huxtable.html). 
+
+I want you to make a table, where at least one cell has non-black text color, one cell is italic, and you have a border on the very bottom of it.
+
+## My Solution 
+
+Using my table from before:
+
+```{r}
+ht %>% set_italic(2:3, 3:4) %>%
+    set_text_color(1, 1:4, "green") %>%
+    set_bottom_border(3, 1:4) 
+```
 

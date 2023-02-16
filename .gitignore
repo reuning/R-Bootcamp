@@ -3,6 +3,7 @@
 
 /.quarto/
 /_site/
+/site_libs/
 
 .DS_Store
 .Rhistory

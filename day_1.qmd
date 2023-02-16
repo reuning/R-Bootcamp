@@ -451,7 +451,7 @@ There might be a popup asking about installing things from "Source" you can hit 
 We can do the same thing but just using R: 
 ```{R}
 library(readr) # load readr package
-setwd("~/Dropbox/Teaching_Kevin/Spring_2023/R Bootcamp/images") # Set working directory 
+setwd("images") # Set working directory 
 df <- read_csv("disability_comp.csv")
 ```
 
