@@ -206,6 +206,7 @@ We should _always_ provide human readable labels on plots. You add `labs()` to s
 . . .
 
 ```{r}
+#| output-location: slide
 ggplot(df, 
     aes(x=mad_gdppc)) +
     geom_histogram() + 
@@ -227,6 +228,8 @@ ggplot(df,
         title="Histogram of GDP per Capita") +
     theme_minimal()
 ```
+
+## Different Theme
 
 ```{r}
 #| output-location: column
@@ -274,7 +277,7 @@ Identify a different variable, make a histogram of, correct the labels, and chan
 ggplot(df, 
     aes(x=vdem_academ)) +
     geom_histogram(fill="gray", color="black") + 
-    labs(y="Frequency", x="Acaddemic Freedom (V-Dem)", 
+    labs(y="Frequency", x="Academic Freedom (V-Dem)", 
         title="Histogram of Academic Freedom") + 
     theme_minimal()
 ```
@@ -340,7 +343,7 @@ We have a new label to fix.
 
 ## Scales and Guides
 
-Each aesthetics has associated functions that can be used to modify the `scale` it uses. For example: `scale_color_gradient()` switches the colors to a gradient defined by a `high` color and a `low` color. 
+Each aesthetics has associated functions that can be used to modify the `scale` it uses. `scale_color_gradient()` switches the colors to a gradient defined by a `high` color and a `low` color. 
 
 ```{r}
 ggplot(df, aes(x=vdem_academ, y=mad_gdppc, 
@@ -364,9 +367,8 @@ ggplot(df, aes(x=vdem_academ, y=mad_gdppc,
 
 ## Other Scales
 
-There are a lot of [scales](https://ggplot2.tidyverse.org/reference/index.html#scales) and often their are similar ones that apply to different aesthetics:
+There are a lot of [scales](https://ggplot2.tidyverse.org/reference/index.html#scales) and often there are similar ones that apply to different aesthetics:
 
-- `scale_color_gradient()` and `scale_fill_gradient()`
 - `scale_color_gradient2()` and `scale_fill_gradient2()`
     - Allows you to set a midpoint
 - `scale_x_log10()` and `scale_y_log`()` 
@@ -436,6 +438,192 @@ df %>% filter(!is.na(br_elect)) %>%
     title="GDP vs Academic Freedom")
 ```
 
+# Smooths and Grouping
+
+## Showing a trend
+
+`geom_smooth()` can be used to add a trend line to our data. 
+
+```{r}
+p <- ggplot(df, aes(x=vdem_academ, y=mad_gdppc,color=fh_polity2)) + 
+    geom_point(size=3) 
+p + geom_smooth()
+```
+
+## Dangers of `geom_smooth()`
+
+`geom_smooth()` is very powerful, but it is easy to have no idea what you are doing with it as defining `trend` is really hard. 
+
+You change the type of trend it makes using the `method=` argument
+
+## Different Smooths - Linear
+
+```{r}
+# Linear regression is "lm"
+p + geom_smooth(method="lm") 
+```
+
+## Different Smooths - Loess line
+
+```{r}
+# A local regression line is "loess"
+p + geom_smooth(method="loess") 
+```
+
+## Different Smooths - Spline
+
+```{r}
+# A spline is "gam"
+p + geom_smooth(method="gam") 
+```
+
+---
+
+
+
+::: {.callout-warning}
+If you cannot explain what is happening to make that line then you should probably avoid using it. 
+:::
+
+## Multiple Smooths
+
+If we have multiple types of observations, we can plot smooths for each one by setting `group=` to that variable. 
+
+
+```{.r}
+df <- df %>% mutate(
+    fert_groups = cut(wdi_fertility, breaks=c(0, 1.8, 2.4, Inf), 
+            labels=c("Below", "Replacement", "Above"))
+            ) %>%
+    group_by(fert_groups) %>% drop_na(fert_groups)
+p <- ggplot(df, aes(x=vdem_academ, y=mad_gdppc,color=fh_polity2)) + 
+    geom_point(size=3) 
+p + geom_smooth(aes(group=fert_groups))
+```
+::: {.callout-note}
+You can use `aes()` in a `geom_*()` if you want to specify something for just that part of the plot.
+:::
+
+## Multiple Smooths
+
+```{r}
+#| echo: false
+df <- df %>% mutate(
+    fert_groups = cut(wdi_fertility, breaks=c(0, 1.8, 2.4, Inf), 
+            labels=c("Below", "Replacement", "Above"))
+            ) %>%
+    group_by(fert_groups) %>% drop_na(fert_groups)
+p <- ggplot(df, aes(x=vdem_academ, y=mad_gdppc,color=fh_polity2)) + 
+    geom_point(size=3) 
+p + geom_smooth(aes(group=fert_groups))
+```
+
+
+
+## Multiple Smooths Improved
+
+```{r}
+p <- ggplot(df, aes(x=vdem_academ, y=mad_gdppc,  group=fert_groups, color=fert_groups)) + 
+    geom_point(size=3) 
+p + geom_smooth(method="lm")
+```
+
+# Facets
+
+## Introduction
+
+Sometimes it is easier to understand the groups if you create individual plots for each group. We call these plots facet and make them with `facet_wrap()` 
+
+To identify what groups to make you put `~variable`. 
+
+## Example
+
+```{r}
+# using plot from previous one still. 
+p + geom_smooth(method="lm") +
+    facet_wrap(~fert_groups)
+```
+
+## Check 
+
+Pick two interval variables, and an additional variable (any type). Make a scatter plot of the variables using the third variable to color in the points. 
+
+Add a smooth, and facet on a variable as well. 
+
+Don't forget labels. 
+
+
+# Everything together
+
+```{r}
+#| echo: true
+#| fig-align: center
+#| output-location: slide
+df %>% 
+    mutate(type = cut(fh_polity2,  breaks=c(0, 3, 7, 10), 
+                        labels=c("Autocracy", "Anocracy", "Democracy"))) %>% 
+    drop_na(type) %>%  
+    ggplot(aes(y=wdi_afp, x=mad_gdppc)) + 
+    geom_smooth(method="lm", color='black') + 
+    geom_point(color='orangered3') + 
+    facet_wrap(~type) + 
+    scale_x_log10(labels=scales::label_dollar()) +
+    theme_minimal() + theme(strip.text=element_text(size=20)) + 
+    labs(y="Percent of Labor\nForce in Military", 
+    x="GDP per Capita\n(Log scale)") 
+```
+
+::: {.fragment .current-only data-code-focus="2-3"}
+Mutating our variables
+:::
+
+::: {.fragment .current-only data-code-focus="4"}
+Dropping variables with missing values
+:::
+
+::: {.fragment .current-only data-code-focus="5"}
+Setting my `x` and `y` variables
+:::
+
+::: {.fragment .current-only data-code-focus="6"}
+Creating a linear regression line, in black.
+:::
+
+::: {.fragment .current-only data-code-focus="7"}
+Scatter plot with nice colors
+:::
+
+::: {.fragment .current-only data-code-focus="8"}
+Facet on `type`
+:::
+
+
+::: {.fragment .current-only data-code-focus="9"}
+Change the x-axis to be logged and make the axis labels nicer.
+:::
+
+::: {.fragment .current-only data-code-focus="10"}
+Setting the theme up
+:::
+
+::: {.fragment .current-only data-code-focus="11-12"}
+Labels!
+:::
+
+
+# Saving Plots
+
+## Two ways to save plots
+
+- Rstudio has an "export" button above the plots that you can use. 
+- Call `ggsave()` with a file name:
+
+```{.r}
+p <- ggplot(...
+ggsave(filename="file.png", plot=p, width=6, 
+    height=4, units="in")
+```
+Saves plot `p` as a png, with a size of 6 by 4 inches. 
 
 ## Additional Help
 
@@ -461,7 +649,7 @@ Less is usually more
 People have assumptions about how plots work, don't break them unless you make it **very** clear that you are.
 
 
-![](images/gun_violence.jpg){height=80% fig-align="center"}
+![](images/gun_violence.jpg){fig-align="center"}
 
 
 ## Some Assumptions
@@ -481,7 +669,7 @@ Some assumptions people make:
 
 General principles: Follow assumptions
 
-![](images/flipped_2.png){width=100% fig-align="center"}
+![](images/flipped_2.png){fig-align="center"}
 
 ## General principles: Make it clear
 
@@ -493,11 +681,11 @@ Make it clear to the viewer what they are supposed to take away from it.
 
 ## Example: Making it Unclear 
 
-![](images/comparisons_1.png){height=100% fig-align="center"}
+![](images/comparisons_1.png){fig-align="center"}
 
 ## Example: Making it clear 
 
-![](images/comparisons_2.png){width=100% fig-align="center"}
+![](images/comparisons_2.png){fig-align="center"}
 
 ## Longer Example - Local Party Social Media
 
@@ -546,5 +734,5 @@ p1 <- ggplot(tmp, aes(x=lubridate, y=N, fill=Party,
 
 ## Plot 
 
-![](images/all_posts.png){width=100% fig-align="center"}
+![](images/all_posts.png){fig-align="center"}
 
