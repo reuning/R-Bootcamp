@@ -676,7 +676,6 @@ General principles: Follow assumptions
 Make it clear to the viewer what they are supposed to take away from it.
 
 - If they should look at trends, add a trend line
-
 - If they are making comparisons across groups put those groups together
 
 ## Example: Making it Unclear 
@@ -706,7 +705,6 @@ Social media data can be very interesting:
 - We have the text of the posts.
 - We have the reactions to the post (number of likes, comments shares)
 - We have the *exact* time the post was made.
-:::
 
 ## Looking at Trends
 
