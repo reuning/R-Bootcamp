@@ -438,6 +438,7 @@ ht
 And now we export it with `quick_docx()`
 
 ```{r}
+#install.packages(c("flextable", "officer"))
 quick_docx(ht, file="images/My First Summary Table.docx")
 ```
 

@@ -8,6 +8,7 @@ author: ""
 ## R Bootcamp:
 - [Basics](day_1.qmd)
 - [Data Wrangling and Summarizing](day_2.qmd)
+- [Mutating and ggplot](day_3.qmd)
 
 ## Data
 - R Bootcamp Country data: [data](images/country_data.csv) and [variable table](pages/country_data.qmd)
