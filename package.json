@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "netlify-cli": "^12.10.0"
+    "netlify-cli": "^12.14.0"
   },
   "devDependencies": {
     "netlify-plugin-checklinks": "^4.1.1"
