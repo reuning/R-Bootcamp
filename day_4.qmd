@@ -324,7 +324,7 @@ This has a few benefits:
 - You can export the report to a variety of document types. 
 - It makes it easy to show how you did what you did. 
 
-Note: This entire presentation is written in Quarto and available here. 
+Note: This entire presentation is written in Quarto and [available here.](https://github.com/reuning/R-Bootcamp)
 
 ## Creating a Quarto Document 
 
