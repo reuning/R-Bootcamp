@@ -8,3 +8,5 @@
 .DS_Store
 .Rhistory
 node_modules
+
+*.docx
