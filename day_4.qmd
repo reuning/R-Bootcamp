@@ -291,6 +291,7 @@ Make it clear to the viewer what they are supposed to take away from it.
 ## Longer Example - Local Party Social Media
 
 \normalsize 
+
 - Interested in how local parties in the US use social media.
 - Collected social media info for  6,000 local parties.
 - Used Crowdtangle to download all their facebook posts from 2016 to 2021.
@@ -311,6 +312,7 @@ Social media data can be very interesting:
 ## Looking at Trends
 
 Always good to look at trends in data: 
+
 -  Calculate daily number of posts.
 -  Calculate the average number of reactions per post per day.
 
