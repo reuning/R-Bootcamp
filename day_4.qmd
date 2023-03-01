@@ -598,4 +598,4 @@ What do you do if you run into problems?
 - Check that there are commas where there should be.
 - Start running through the code piece by piece. 
 - Look at the manual and make sure your assumptions about the function are right. 
-- Google the error, read Stackexchange/Stackoverflow
+- Google the error, read Stack Exchange/Stack Overflow
