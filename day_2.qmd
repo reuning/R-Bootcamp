@@ -17,7 +17,7 @@ revealjs-plugins:
 Today we are going to use a subset of country data from [The Quality of Governance Institute](https://www.gu.se/en/quality-government/qog-data).
 
 - Download the [data we'll be using here](images/country_data.csv)
-- You can open it with `read_csv()` and if you need more help check out the [first day of slides.](day_1.qmd)
+- You can open it with `read_csv()` and if you need more help check out the [first day of slides.](https://kevinreuning.com/presentations/pages/day_1.html)
 
 
 ```{r}

@@ -28,7 +28,7 @@ Also do not use pull() as much.
 Today we are going to keep using a subset of country data from [The Quality of Governance Institute](https://www.gu.se/en/quality-government/qog-data).
 
 - Download the [data we'll be using here](images/country_data.csv)
-- You can open it with `read_csv()` and if you need more help check out the [first day of slides.](day_1.qmd)
+- You can open it with `read_csv()` and if you need more help check out the [first day of slides.](https://kevinreuning.com/presentations/pages/day_1.html)
 - There is a description of all the [variables I've included here.](https://kevinreuning.com/presentations/pages/country_data.html) 
 
 
