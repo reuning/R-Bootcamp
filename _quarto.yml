@@ -1,6 +1,7 @@
 author: "Kevin Reuning"
 project:
   type: website
+  execute-dir: project
 
 website:
   title: "Presentations"
@@ -13,8 +14,10 @@ format:
   html:
     theme: cosmo
     css: styles.css
+    include-in-header: analytics.html
   revealjs: 
     theme: [default, custom_pres.scss]
+    include-in-header: analytics.html
     execute:
         echo: true
 
