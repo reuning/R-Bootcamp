@@ -21,7 +21,7 @@ Both packages have function(s) to convert dataframes or matrices into their own 
 
 In the below examples we use two datasets. The adjacency matrix is the [Islamic State Group network available via UCINET](https://sites.google.com/site/ucinetsoftware/datasets/covert-networks/islamic-state-group). The edgelist is campaign donors in the 2016 Nevada State Senate election that is part of my own data on campaign donors available on the [Harvard Dataverse.](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/YMDFPW)
 
-If you want to follow along the Nevada egdelist data is [here](images/network_data/NV-2013-2016-Edges.csv) and the metadata is [here](images/network_data/NV-2013-2016-Meta.csv). 
+If you want to follow along the Nevada egdelist data is [here](network_data/NV-2013-2016-Edges.csv) and the metadata is [here](network_data/NV-2013-2016-Meta.csv). 
 
 ::: {.panel-tabset}
 
@@ -34,7 +34,7 @@ In order to convert our dataframe into a matrix we need to use `as.matrix()` but
 ```{r}
 library(network)
 
-adj_df <- read.csv("images/network_data/IS_BBC_61_IS_BBC-FRIENDS.csv", row.names=1)
+adj_df <- read.csv("network_data/IS_BBC_61_IS_BBC-FRIENDS.csv", row.names=1)
 adj_mat <- as.matrix(adj_df)
 statnet_net <- network(adj_mat, directed=FALSE)
 
@@ -45,7 +45,7 @@ Reading in an edgelist is comparatively easy. Assuming that you have a csv with 
 ```{r}
 library(network)
 
-edge_df <- read.csv("images/network_data/NV-2013-2016-Edges.csv")
+edge_df <- read.csv("network_data/NV-2013-2016-Edges.csv")
 statnet_net <- network(edge_df, directed=FALSE)
 
 ```
@@ -65,7 +65,7 @@ In order to convert our dataframe into a matrix we need to use `as.matrix()` but
 ```{r}
 library(igraph)
 
-adj_df <- read.csv("images/network_data/IS_BBC_61_IS_BBC-FRIENDS.csv", row.names=1)
+adj_df <- read.csv("network_data/IS_BBC_61_IS_BBC-FRIENDS.csv", row.names=1)
 adj_mat <- as.matrix(adj_df)
 igraph_net <- graph_from_adjacency_matrix(adj_mat, mode="undirected")
 
@@ -76,7 +76,7 @@ Reading in an edgelist is comparatively easy. Assuming that you have a csv with 
 ```{r}
 library(igraph)
 
-edge_df <- read.csv("images/network_data/NV-2013-2016-Edges.csv")
+edge_df <- read.csv("network_data/NV-2013-2016-Edges.csv")
 igraph_net <- graph_from_data_frame(edge_df, directed=FALSE)
 ```
 
@@ -100,8 +100,8 @@ Your `metadata` or vertex attributes will be in an additional dataframe with the
 ```{r}
 library(network)
 
-edge_df <- read.csv("images/network_data/NV-2013-2016-Edges.csv")
-meta_df <- read.csv("images/network_data/NV-2013-2016-Meta.csv")
+edge_df <- read.csv("network_data/NV-2013-2016-Edges.csv")
+meta_df <- read.csv("network_data/NV-2013-2016-Meta.csv")
 
 statnet_net <- network(edge_df, vertices=meta_df, 
                 directed=FALSE)
@@ -116,8 +116,8 @@ Your `metadata` or vertex attributes will be in an additional dataframe with the
 ```{r}
 library(igraph)
 
-edge_df <- read.csv("images/network_data/NV-2013-2016-Edges.csv")
-meta_df <- read.csv("images/network_data/NV-2013-2016-Meta.csv")
+edge_df <- read.csv("network_data/NV-2013-2016-Edges.csv")
+meta_df <- read.csv("network_data/NV-2013-2016-Meta.csv")
 
 igraph_net <- graph_from_data_frame(edge_df, vertices=meta_df, 
                 directed=FALSE)
