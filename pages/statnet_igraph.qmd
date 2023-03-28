@@ -264,7 +264,65 @@ Access and modifying edge attributes follows in a similar way but with `get.edge
 
 ::: 
 
-### Something to Remember
+### Extracting Data from Networks 
+
+One common occurrence in network analysis is extracting nodal/vertex data out from your network. For example, you might want to use regression analysis to look at whether centrality of a node is related to other nodal characteristics. To do this you'll load the data into a network, calculate the centrality scores, and then want to append this to your data. The easiest way (in my opinion) is to add these centrality statistics as a vertex attribute then convert the network into a vertex based dataframe. 
+
+::: {.panel-tabset}
+
+
+## Statnet 
+
+For statnet this is accomplished using `as.data.frame()` and indicating whether you want to convert to a vertex or edge dataframe using the `unit=` argument. In the below example I calculate the degree and betweenness centrality of each node, then convert it to a dataframe and show the first 5 rows.
+
+```{r}
+#| echo: false
+
+detach("package:igraph", unload=TRUE)
+
+```
+
+```{r}
+library(network)
+library(sna)
+
+statnet_net %v% "degree" <- degree(statnet_net, gmode="graph")
+statnet_net %v% "between" <- betweenness(statnet_net, gmode="graph")
+
+df <- as.data.frame(statnet_net, unit="vertices")
+
+df[1:5,]
+
+```
+
+
+## igraph 
+
+For graiph this is accomplished using `as_data_frame()` and indicating whether you want to convert to a vertex or edge dataframe using the `what=` argument. In the below example I calculate the degree and betweenness centrality of each node, then convert it to a dataframe and show the first 5 rows. 
+
+```{r}
+#| echo: false
+
+detach("package:sna", unload=TRUE)
+detach("package:network", unload=TRUE)
+
+```
+
+```{r}
+library(igraph)
+
+V(igraph_net)$degree <- degree(igraph_net)
+V(igraph_net)$between <- betweenness(igraph_net)
+
+df <- as_data_frame(igraph_net, what="vertices")
+
+df[1:5,]
+
+```
+
+:::
+
+### Using Both Packages
 
 You need to be careful when you load both igraph and the statnet suite of packages. They have several functions with the _exact_ same names. The example below shows what happens when you do this:
 
