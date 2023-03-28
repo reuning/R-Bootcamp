@@ -1,6 +1,9 @@
 ---
 title: "Statnet vs igraph"
-format: html
+format:
+  html:
+    toc: true
+    toc-location: left
 fontsize: 1em
 author: ""
 knitr: 
