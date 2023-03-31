@@ -1,10 +1,14 @@
 ---
-title: "Introduction to R: Data Manipulation and Summary"
+title: "Wrangling and Summarizing Data in R"
 author: "Kevin Reuning"
 format: revealjs
 revealjs-plugins:
   - codefocus
+execute: 
+  cache: true
 ---
+
+
 
 ## Goals for Today
 
@@ -12,17 +16,30 @@ revealjs-plugins:
 - pipes
 - Summarizing data
 
+## Tidyverse
+
+- A lot of data science work is done using the Tidyverse suite of packages.
+- We can install the entire suite using: `install.package()`
+
+Run: 
+```{.R}
+install.packages("tidyverse")
+```
+
+There might be a popup asking about installing things from "Source" you can hit no on it. 
+
+
 # Data for today 
 
 Today we are going to use a subset of country data from [The Quality of Governance Institute](https://www.gu.se/en/quality-government/qog-data).
 
-- Download the [data we'll be using here](images/country_data.csv)
-- You can open it with `read_csv()` and if you need more help check out the [first day of slides.](https://kevinreuning.com/presentations/workshops/r_bootcamp/day_1.html)
+- Download the [data we'll be using here](../r_bootcamp/images/country_data.csv)
+- You can open it with `read_csv()`
 
 
 ```{r}
 library(readr)
-setwd("images")
+setwd("../r_bootcamp/images/")
 df <- read_csv("country_data.csv")
 ```
 
@@ -30,7 +47,7 @@ df <- read_csv("country_data.csv")
 
 ## Variables
 
-There is a description of all the [variables I've included here.](https://kevinreuning.com/presentations/workshops/r_bootcamp/country_data.html) 
+There is a description of all the [variables I've included here.](https://kevinreuning.com/presentations/pages/country_data.html) 
 
 For now though we are going to use a few of them: 
 
@@ -192,7 +209,6 @@ What does the `pull()` function do? It is another way to access a certain column
 
 ```{r}
 pull(filter(df, bmr_demdur > 100 & top_top1_income_share > .1), cname)
-filter(df, bmr_demdur > 100 & top_top1_income_share > .1)$cname
 sub_df <- filter(df, bmr_demdur > 100 & top_top1_income_share > .1)
 sub_df$cname
 ```
@@ -370,93 +386,121 @@ Summarizing (number of observations, mean of `van_part`, median of `van_part`)
 :::
 
 
-# Saving Results 
+## Another Improvement
 
-There are two ways to save our summary results. Both can be helpful depending on what you are doing:
-
-- `write_csv()`: Writes to a CSV file. 
-- Creating an exportable table. 
-
-## Huxtable 
-
-We are going to install one more package: [huxtable](https://hughjonesd.github.io/huxtable/index.html) (`install.packages("huxtable")`)
-
-The huxtable package is a _a lot_ so we are not going to get to it all but iet lets you do a lot of things:
-
-- Convert dataframe into a table. 
-- Format tables (borders, colors, alignment)
-- Export that table in a lot of formats (html, docx, excel, latex...)
-
-## Get a Table to Export
+Our groups could have better names than 0, 1, 2, and 3. 
 
 ```{r}
-tab_out <- df %>% 
-    drop_na(br_pvote) %>% 
-    group_by(br_pvote) %>%
-    summarize(n=n(), mean=mean(van_part, na.rm=T),
-            median=median(van_part, na.rm=T))
-```
-
-## Using Huxtable {auto-animate=true}
-
-The function `hux()` will create a table object that we can then modify. Lets see what happens when we make a table. 
-
-```{r}
-library(huxtable)
-ht <- hux(tab_out)
-ht
-```
-
-## Using Huxtable {auto-animate=true}
-
-We can then modify the style by pipping it into functions like a `theme_basic()` function and `set_align()`
-
-```{r}
-library(huxtable)
-ht <- hux(tab_out) %>% theme_basic() %>%
-    set_align(2:3, 1, "center") # 2:3 is the rows, 1 the columns to modify.
-ht
-```
-
-## Using Huxtable {auto-animate=true}
-
-Finally we can modify values using the `set_contents()` function
-
-```{r}
-library(huxtable)
-ht <- hux(tab_out) %>% theme_basic() %>%
-    set_align(2:3, 1, "center") %>%
-    set_contents(1, 1:4, 
-    c("Prop Voting?", "N", "Mean", "Median")) %>%
-    set_contents(2:3, 1, c("No", "Yes"))
-ht
+df %>% filter(!is.na(br_elect)) %>% 
+    group_by(br_elect) %>% 
+    summarize(mean=mean(mad_gdppc, na.rm=T), n = n())
 ```
 
 
-## Saving the Document 
 
-And now we export it with `quick_docx()`
+# Changing variables
 
-```{r}
-#install.packages(c("flextable", "officer"))
-quick_docx(ht, file="images/My First Summary Table.docx")
+## `mutate()`
+
+If we want to change the values of a variable we use `mutate()`
+
+General format: 
+
+``mutate(new_var = f(old_var))`` 
+
+. . . 
+
+What function though? `br_elect` is a small set of numbers where each represent a category. This is a factor.  
+
+## Applying `factor()`
+
+`factor()` creates a factor, with a certain set of numeric levels, and labels and so needs somethings:
+
+- The variable you are change (the first thing).
+- The set of numeric levels in the variable. `levels=c( )`
+- Labels you want to apply to the levels. `labels=c( )` 
+
+## Example of Factor 
+
+```{R}
+library(tidyverse)
+df %>% mutate(br_elect_label = 
+        factor(br_elect, levels=c(0, 1, 2, 3), 
+                labels=c("None", "Single-party", 
+                "Non-dem multi-party", "Democratic"))) %>%
+    pull(br_elect_label)
 ```
 
-You can [download my file if you want](images/My%20First%20Summary%20Table.docx)
+## Making better labels
 
-## Huxtable Options and Check
 
-There are a lot of options to modify your table [here](https://hughjonesd.github.io/huxtable/huxtable.html). 
-
-I want you to make a table, where at least one cell has non-black text color, one cell is italic, and you have a border on the very bottom of it.
-
-## My Solution 
-
-Using my table from before:
-
-```{r}
-ht %>% set_italic(2:3, 3:4) %>%
-    set_text_color(1, 1:4, "green") %>%
-    set_bottom_border(3, 1:4) 
+```{R}
+df %>% filter(!is.na(br_elect)) %>% 
+    mutate(br_elect_label = 
+            factor(br_elect, levels=c(0, 1, 2, 3), 
+                    labels=c("None", "Single-party", 
+                    "Non-dem multi-party", "Democratic"))) %>% 
+    group_by(br_elect_label) %>% 
+    summarize(mean=mean(mad_gdppc, na.rm=T), n = n())
 ```
 
+## More Complicated Situations 
+
+Often there are variables we want to _coarsen_ (take from interval and put them into categories), here we can use the `cut()` function to **cut** our variable up into categories. 
+
+There are a variety of ways to `cut()` the most common way is giving it a set of "breaks" where you tell it where you want the bins to be.
+
+```{r}
+set.seed(1) ## Lets me recreate the exact random variables
+vector <- rnorm(100) # creating a bunch of random variables 
+cut_vector <- cut(vector, breaks=c(-4,-1, -0.5, 0, 0.5, 1, 4))
+table(cut_vector)
+```
+
+## Adding Labels
+
+You can also add labels to it, but remember **N** breaks creates **N-1** labels. 
+
+```{r}
+
+set.seed(2)
+vector <- rnorm(100)
+cut_vector <- cut(vector, breaks=c(-4,-1, -0.5, 0, 0.5, 1, 4), 
+    labels=c("Lowest", "Low", "Mid-Low", 
+            "Mid-High", "High", "Highest"))
+table(cut_vector)
+
+```
+
+## Using Cut in Mutate
+
+
+```{r}
+df %>% mutate(
+    corrupt = cut(ti_cpi, breaks=c(0, 33, 66, 100), 
+            labels=c("Low", "Mid", "High"))
+            ) %>%
+    group_by(corrupt) %>% 
+    summarize(mean=mean(mad_gdppc, na.rm=T), n = n())
+
+```
+
+## Check 
+
+There is a variable that captures the fertility rate, mutate it into a variable with 3 categories one that is around replacement rate (2.1), one that is below it, and one that is above it. 
+
+Then `group_by()` that new variable and count up how many observations in each bin. 
+
+(it might help to use `range()` before identifying the bins)
+
+## My Solution
+
+```{r}
+df %>% mutate(
+    fert_groups = cut(wdi_fertility, breaks=c(0, 1.8, 2.4, Inf), 
+            labels=c("Below", "Replacement", "Above"))
+            ) %>%
+    group_by(fert_groups) %>% 
+    summarize(n = n())
+
+```

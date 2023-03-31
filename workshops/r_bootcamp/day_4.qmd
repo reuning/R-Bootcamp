@@ -17,8 +17,8 @@ revealjs-plugins:
 Today we are going to keep using a subset of country data from [The Quality of Governance Institute](https://www.gu.se/en/quality-government/qog-data).
 
 - Download the [data we'll be using here](images/country_data.csv)
-- You can open it with `read_csv()` and if you need more help check out the [first day of slides.](https://kevinreuning.com/presentations/pages/day_1.html)
-- There is a description of all the [variables I've included here.](https://kevinreuning.com/presentations/pages/country_data.html) 
+- You can open it with `read_csv()` and if you need more help check out the [first day of slides.](https://kevinreuning.com/presentations/workshops/r_bootcamp/day_1.html)
+- There is a description of all the [variables I've included here.](https://kevinreuning.com/presentations/workshops/r_bootcamp/country_data.html) 
 
 
 ```{r}
@@ -548,7 +548,7 @@ The average GDP in a country is `r  knitr::inline_expr('mean_gdp')` while the ma
 
 ## Check 
 
-Above the plot, I want you to write a description of the data. You can get that [info here](https://kevinreuning.com/presentations/pages/country_data.html). Make it clear what each variable represents. 
+Above the plot, I want you to write a description of the data. You can get that [info here](https://kevinreuning.com/presentations/workshops/r_bootcamp/country_data.html). Make it clear what each variable represents. 
 
 Part of making it clear is incorporating what the mean of your variables are. Calculate the mean of your two interval variables in the R block where you read in the data, and then add that info to your description. 
 

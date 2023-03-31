@@ -189,8 +189,10 @@ Variable_1 <- 4
 
 There are some limits, they cannot start with numbers and cannot use some symbols 
 
-```{R}
+```{r}
 #| error: true
+#| cache: false
+
 1_variable <- 2 # variables cannot start with a number though 
 ```
 

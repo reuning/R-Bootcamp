@@ -11,5 +11,10 @@ author: ""
 - [Mutating and ggplot](workshops/r_bootcamp/day_3.qmd)
 - [ggplot and Quarto](workshops/r_bootcamp/day_4.qmd)
 
+## Other Resources 
+
+- [Statnet and igraph guide](pages/statnet_igraph.qmd)
+- [Manipulating and Summarizing Data in R](workshops/individual/wrangling_summarizing.qmd)
+
 ## Data
 - R Bootcamp Country data: [data](workshops/r_bootcamp/images/country_data.csv) and [variable table](workshops/r_bootcamp/country_data.qmd)

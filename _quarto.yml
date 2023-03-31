@@ -5,7 +5,6 @@ project:
 website:
   title: "Presentations"
   site-url: "https://kevinreuning.com/presentations/"
-  google-analytics: "G-Q4HC79ZRBZ"
   sidebar: false
   navbar: false
 
