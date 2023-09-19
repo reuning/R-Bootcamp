@@ -397,10 +397,10 @@ The manual can be hard to read at first. A few tips:
 
 ## Some Other Functions:
 
-- mean()
-- median()
-- sd()
-- range()
+- `mean()`
+- `median()`
+- `sd()`
+- `range()`
 
 Take a moment now, and look at the manual of one of these functions. 
 
