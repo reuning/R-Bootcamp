@@ -6,11 +6,10 @@ command = "quarto render"
 [[plugins]]
   package = "netlify-plugin-hugo-cache-resources"
   
-[[plugins]]
-  package = "netlify-plugin-checklinks"
-
-  [plugins.inputs]
-  skipPatterns = ["https://plausible.io/js/script.js"]
+# [[plugins]]
+#   package = "netlify-plugin-checklinks"
+#   [plugins.inputs]
+#   skipPatterns = ["https://plausible.io/js/script.js"]
 
 
 [[plugins]]
@@ -31,5 +30,5 @@ command = "quarto render"
 		"yandex"
 	]
 
-[[plugins]]
-package = "netlify-plugin-image-optim"
+# [[plugins]]
+# package = "netlify-plugin-image-optim"

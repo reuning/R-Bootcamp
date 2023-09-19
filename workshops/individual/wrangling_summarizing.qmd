@@ -47,7 +47,7 @@ df <- read_csv("country_data.csv")
 
 ## Variables
 
-There is a description of all the [variables I've included here.](https://kevinreuning.com/presentations/pages/country_data.html) 
+There is a description of all the [variables I've included here.](https://kevinreuning.com/presentations/workshops/r_bootcamp/country_data.html) 
 
 For now though we are going to use a few of them: 
 
