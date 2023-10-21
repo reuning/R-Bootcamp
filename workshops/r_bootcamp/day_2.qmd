@@ -8,6 +8,10 @@ revealjs-plugins:
 
 ## Goals for Today
 
+<!--
+Change the data from top 1% later. It is too confusing. 
+---> 
+
 - Manipulate data (filter specific rows, select columns).
 - pipes
 - Summarizing data
