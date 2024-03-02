@@ -127,7 +127,7 @@ p + geom_smooth(aes(group=fert_groups), method="lm")
 
 ## Multiple Smooths Improved
 
-```{r, code-line-numbers:"6,10"}
+```{r}
 #| output-location: slide
 df_new <- df %>% mutate(
     fert_groups = cut(wdi_fertility, breaks=c(0, 1.9, 2.3, Inf), 

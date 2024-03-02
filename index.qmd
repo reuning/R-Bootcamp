@@ -4,6 +4,8 @@ format: html
 author: ""
 ---
 
+## Presentations: 
+- [Local Unions](presentations/local_unions.qmd)
 
 ## R Bootcamp:
 - [Basics](workshops/r_bootcamp/day_1.qmd)

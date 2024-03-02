@@ -1,8 +1,6 @@
 {
-  "dependencies": {
-    "netlify-cli": "^12.14.0"
-  },
   "devDependencies": {
+    "netlify-cli": "^17.0.1",
     "netlify-plugin-checklinks": "^4.1.1",
     "netlify-plugin-image-optim": "^0.4.0"
   }
