@@ -1,0 +1,75 @@
+---
+title: "Introduction to SNA: Concepts and Data"
+author: "Kevin Reuning"
+format: 
+    clean-revealjs:
+        width: 1600
+        height: 900
+        slide-number: false
+        callout-icon: false
+        execute:
+            echo: true
+---
+
+# Who am I
+
+:::: {.columns}
+
+::: {.column width="75%"}
+- I'm Kevin Reuning (ROY-ning). 
+- I'm an Assistant Professor in Political Science. 
+- Prior to grad school I had very little experience in coding. 
+:::
+
+::: {.column width="25%"}
+![](images/profile.jpg){width="250" fig-align="right"}
+:::
+
+::::
+
+# Goals For this Bootcamp 
+
+- Understand basic SNA terminology
+- Load a variety of SNA formats into R.
+- Calculate some basic network and nodal statistics. 
+- Make network visualizations. 
+- Know where to look for more. 
+
+## Where We Are Going {.nostretch}
+
+![](images/sppq.png){width="80%" fig-align="center"}
+
+
+# Goals for Today
+
+- Go over some basic language of social network analysis. 
+- Load some SNA data into R.
+- Start manipulating that 
+
+# Social Network Concepts
+
+## Nodes/Vertices and Edges
+
+SNA focuses on the relationships between different entities: 
+
+- **Nodes** or **Vertices**: The entities that make-up your network.
+    - Ex: individuals, animals, organizations, counties, ...
+- **Edges:** The relationships that make-up your network. 
+    - Ex: Friendship, proximity, exchange of goods, ...
+
+## Edges - Variation and Types
+
+There are a lot of types of edges. 
+
+# R and SNA
+
+There are two major sets of R libraries used for networking: 
+
+
+- [igraph](https://igraph.org/): Fewer analysis options, better default plotting, has python and and C versions as well.  
+- [statnet](https://statnet.org/): Has a lot of analysis options, the plotting isn't as nice (in my opinion), and a lot of it is divided up into additional libraries. 
+
+## Following along
+
+You need to learn by doing. If you haven't opened RStudio yet, do so now. You should have something like:
+
