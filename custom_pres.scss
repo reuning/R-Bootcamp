@@ -1,13 +1,11 @@
 /*-- scss:defaults --*/
 
-@import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;700&family=Fira+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-
-
-// fonts
-$font-family-sans-serif: 'Fira Sans', sans-serif;
-$presentation-font-size-root: 36px;
-$font-family-monospace: 'Fira Mono', monospace;
 
 //$code-block-bg: #eaeaea;
 $code-block-bg: #fff;
 $code-block-border-color: darken($code-block-bg, 60%);
+
+
+.reveal pre {
+    font-size: .75em !important; 
+}

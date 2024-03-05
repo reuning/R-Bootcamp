@@ -187,8 +187,8 @@ ggraph(net) +
 There are two major sets of R libraries used for networking: 
 
 
-- [igraph](https://igraph.org/): Fewer analysis options, better default plotting, has python and and C versions as well.  
-- [statnet](https://statnet.org/): Has a lot of analysis options, the plotting isn't as nice (in my opinion), and a lot of it is divided up into additional libraries. 
+- [igraph](https://igraph.org/): A lot of more basic analysis options, also has python and and C versions as well. Overall easier to manipulate your network objects.
+- [statnet](https://statnet.org/): Has access to more advanced analysis, but a lot of it is divided up into additional libraries. 
 
 ## Following along
 
@@ -353,5 +353,126 @@ comps$csize ## Size of each component
 comps$membership ## Membership for each node
 ```
 
-## Loading Network from an Adjacency Matrix
+# Loading Network from an Edge List
 
+## Process 
+
+Now we are going to use a network of political donors in Ohio. Download the edgelist data [here](data/edge_OH.csv) and the nodal data [here](data/meta_OH.csv). More info is [here](https://kevinreuning.com/resources/network_create/). 
+
+Need to do the following: 
+
+1. Load the edge list and nodal data into R as two different objects `read.csv()`
+2. Combine them into an igraph object `graph_from_data_frame()`
+
+```{r}
+edge_df <- read.csv("data/edge_OH.csv")
+node_df <- read.csv("data/meta_OH.csv")
+net <- graph_from_data_frame(edge_df, vertices=node_df, directed=F)
+
+```
+
+## `graph_from_data_frame`
+
+There are some options we can set: 
+
+- `directed=`
+    - Directed or not? `TRUE` or `FALSE`
+- `vertices=`
+    - Adding data to the vertices. The first column needs to match the identifiers used in the ede list. 
+
+::: {.callout-warning}
+You can only directly include isolates in edge lists if you have a vertex data frame.
+:::
+
+## igraph Object for Ohio Network 
+
+```{r}
+net
+```
+
+# Vertex and Edge Attributes
+
+## Accessing Them
+
+You can access vertex and edges in your Igraph object using `V()` or `E()`. This is useful to access attributes using `$variable`
+
+```{.r}
+V(net)$variable_1 ## Accesses the `variable_1` vertex attribute
+E(net)$variable_1 ## Accesses the `variable_1` edge attribute
+```
+
+## Example 
+
+There is a `Total` vertex attribute which is the total amount donated: 
+
+```{r}
+V(net)$Total[1:10] ## Access the first 10 
+```
+
+## Deleting Vertices 
+
+This can be helpful in deleting vertices with the `delete_vertices()` function. Lets remove all vertices where they donated less than $2,000: 
+
+```{r}
+verts_delete <- V(net)[V(net)$Total < 2000]
+sub_net <- delete_vertices(net, verts_delete)
+vcount(sub_net)
+```
+
+## Deleting Edges 
+
+We can do the same thing with edges, lets keep just the edges that are marked `"Strong"` in the `edge` edge attribute:
+
+```{r}
+components(net)$no ## Everything in 1 component
+edges_delete <- E(net)[ E(net)$edge!= "Strong"]
+trimmed_net <- delete_edges(net, edges_delete)
+components(trimmed_net)$no ## New network is more split apart
+```
+
+## Adding Attributes
+
+We can also add an attribute to the network. Here we add vertex attribute that indicates what component everyone is in:
+
+```{r}
+comps <- components(trimmed_net)
+V(trimmed_net)$Comp <- LETTERS[comps$membership]
+V(trimmed_net)$Comp[1:10]
+```
+
+`comps$membership` returns a numeric indicator of membership in a component. I use `LETTERS[]` to convert that into a letter instead of a number. 
+
+# Other Formats 
+
+## Loading Network Formatted Data
+
+The `read_graph()` function can load in a variety of native network formats. You should set `format=` when you call it: 
+
+For example using this [ground squirrel data](data/ground_squirrel_smith_2017a.graphml)
+
+```{r}
+net <- read_graph("data/ground_squirrel_smith_2017a.graphml", 
+    format="graphml")
+net
+```
+
+# Putting it Together
+
+## Test your Knowledge
+
+The next slide has a bunch of datasets for networks. I want you to do the following:
+
+- Find a network you think is interesting, download it. 
+- Open the network in R
+- Calculate the number of vertices, edges, and the number of components. 
+- Create a vertex attribute for component membership. 
+
+## Databases of Data
+
+- Netzschleuder: <https://networks.skewed.de/> 
+    - Click the "CSV" option to download them, the other formats use a strange file compression. 
+    - This has some _very_ large networks
+- Animal Social Network Repository: <https://bansallab.github.io/asnr/data.html> 
+    - Hosted on github, once you find the network, click on the "graphml" to show the data, and then there is a download button the right side with a downward arrow. 
+- UCINET Data: <https://sites.google.com/site/ucinetsoftware/datasets> 
+    - Has canonical datasets, poorly maintained. 

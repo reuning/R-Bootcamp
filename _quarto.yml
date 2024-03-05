@@ -18,6 +18,11 @@ format:
     include-in-header: analytics.html
     execute:
         echo: true
+  clean-revealjs: 
+    theme: [default, custom_pres.scss]
+    include-in-header: analytics.html
+    execute:
+        echo: true
 
 knitr:
   opts_chunk:
