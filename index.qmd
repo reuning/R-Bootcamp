@@ -4,14 +4,14 @@ format: html
 author: ""
 ---
 
-## Presentations: 
-- [Local Unions](presentations/local_unions.qmd)
-
 ## R Bootcamp:
 - [Basics](workshops/r_bootcamp/day_1.qmd)
 - [Data Wrangling and Summarizing](workshops/r_bootcamp/day_2.qmd)
 - [Mutating and ggplot](workshops/r_bootcamp/day_3.qmd)
 - [ggplot and Quarto](workshops/r_bootcamp/day_4.qmd)
+
+## Social Network Analysis Bootcamp
+- [Intro to SNA](workshops/sna/day_1.qmd)
 
 ## Other Resources 
 
