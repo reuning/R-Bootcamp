@@ -13,6 +13,13 @@ revealjs-plugins:
   - codefocus
 ---
 
+<!--
+
+Double check the simple example early on. Something is wrong with the labeling. 
+weighted=NA, in adjacency matrix 
+Add: library(igraph) to the first time using igraph. 
+
+--> 
 # Who am I
 
 :::: {.columns}
@@ -105,7 +112,7 @@ $$
 \mathbf{A} = \left[\begin{array}
 {rrr}
 0 & 0 & 1 & 0 \\
-0 & 1 & 1 & 0 \\
+0 & 0 & 0 & 0 \\
 1 & 1 & 0 & 1 \\
 1 & 0 & 1 & 0 \\
 \end{array}\right]
@@ -119,9 +126,9 @@ library(igraph)
 library(ggraph)
 theme_set(theme_graph())
 mat <- matrix(c(0,0,1,0,
-                0,1,1,0,
+                0,0,0,0,
                 1,1,0,1,
-                1,0,1,0), ncol=4, byrow=F )
+                1,0,1,0), ncol=4, byrow=T)
 colnames(mat) <- letters[1:4]
 net <- graph_from_adjacency_matrix(mat)
 
@@ -226,9 +233,11 @@ Need to do the following:
 
 
 ```{r}
+library(igraph)
 mat <- read.csv("data/COCAINE_JAKE.csv", row.names=1)
 mat <- as.matrix(mat)
-net <- graph_from_adjacency_matrix(mat, mode="directed")
+net <- graph_from_adjacency_matrix(mat, mode="directed", 
+                                   weighted=T)
 ```
 
 ## `graph_from_adjacency_matrix()`
@@ -239,8 +248,9 @@ There are some options we can set:
     - `"directed"` directed network
     - `"undirected"` undirected, using upper triangle to make
 - `weighted=` 
-    - `NULL` (default) the numbers in matrix give the _number_ of edges between
+    - `NULL` (default) the numbers in matrix give the _number_ of edges between.
     - `TRUE` creates edge weights. 
+    - `NA` creates edges if they are greater than 0, ignore the rest.
 - `diag=` where to include the diagonal, set to `FALSE` to ignore diagonals.
 - `add.colnames=`
     - `NULL` (default) use column names as the vertex names. 
