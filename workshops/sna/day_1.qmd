@@ -15,9 +15,7 @@ revealjs-plugins:
 
 <!--
 
-Double check the simple example early on. Something is wrong with the labeling. 
-weighted=NA, in adjacency matrix 
-Add: library(igraph) to the first time using igraph. 
+Provide all data early on.
 
 --> 
 # Who am I
@@ -325,8 +323,8 @@ When a network is directed, then we need to think about direction.
 
 ```{r network_comp_dir}
 #| fig-subcap: 
-#|     - "Broken into Strong Components"
 #|     - "Broken into Weak Components"
+#|     - "Broken into Strong Components"
 #| layout-ncol: 2
 #| echo: false
 
@@ -458,10 +456,10 @@ V(trimmed_net)$Comp[1:10]
 
 The `read_graph()` function can load in a variety of native network formats. You should set `format=` when you call it: 
 
-For example using this [ground squirrel data](data/ground_squirrel_smith_2017a.graphml)
+For example using this [ground squirrel data](data/ground_squirrel_smith_2016a.graphml)
 
 ```{r}
-net <- read_graph("data/ground_squirrel_smith_2017a.graphml", 
+net <- read_graph("data/ground_squirrel_smith_2016a.graphml", 
     format="graphml")
 net
 ```
