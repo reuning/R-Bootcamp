@@ -1,0 +1,517 @@
+---
+title: "Network Visualizations"
+author: "Kevin Reuning"
+format: 
+    clean-revealjs:
+        width: 1600
+        height: 900
+        slide-number: false
+        callout-icon: true
+execute:
+    echo: true
+    fig-align: "center"
+---
+
+
+## Data for Today
+
+We are going to use two networks today:
+
+- A network of squirrels, the data is [here](data/ground_squirrel_smith_2016b.graphml) with more info [here](https://github.com/bansallab/asnr/tree/master/Networks/Mammalia/groundsquirrel_association_weighted) and [here](https://royalsocietypublishing.org/doi/10.1098/rstb.2017.0249)
+- The network of the Paris metro system. You can download that data [here](data/paris_rail.graphml). 
+
+Both are in the `graphml` format, if you want to load them in R: 
+
+```{.r}
+sq_net <- read_graph("ground_squirrel_smith_2016b.graphml", format="graphml")
+
+```
+
+
+
+
+## Goals for this Session
+
+```{r setup}
+#| echo: false 
+
+library(igraph)
+library(ggraph)
+set_graph_style(plot_margin=margin(10, 10, 10, 10))
+
+```
+
+
+- Go over different concepts of centrality in a network. 
+- Calculate those measures in R. 
+
+
+## Visualizing Networks 
+
+Now we are going to move onto visualizing networks. 
+
+Visualizations _can_ be useful with network data, but they are also hard to do: 
+
+- We have complicated data. 
+- We often want to show multiple "types" of information. 
+
+## Package 
+
+We are going to use the ``ggraph`` package. 
+
+Benefits: 
+
+- It uses a ggplot2 style interface. 
+- It allows a lot of fine-tuning of plots.
+- Has a fair amount of useful online documentation on [layouts](https://ggraph.data-imaginist.com/articles/Layouts.html), [nodes](https://ggraph.data-imaginist.com/articles/Nodes.html), and [edges](https://ggraph.data-imaginist.com/articles/Edges.html)
+
+Cons: 
+
+- It is a bit overly complicated at times.
+
+## New Data 
+
+We are going to use a small canned dataset you can download from the internet: [strike.paj](https://sites.google.com/site/ucinetsoftware/datasets/informal-communication-within-a-sawmill-on-strike)
+
+It is a communication network between workers at a sawmill. It also is a unique data format: "pajek" which thankfully igraph has a function for
+
+\footnotesize
+```{r}
+#| echo: true
+library(igraph)
+net <- read_graph("data/strike.paj", format="pajek")
+ecount(net)
+vcount(net)
+```
+
+## Basics of Plot
+
+Just like ggplot2 all visualizations will start with a call to `ggraph()` 
+
+\footnotesize
+```{r}
+#| out-height: 40% 
+#| echo: true
+library(ggraph)
+ggraph(net)
+
+```
+
+## Adding Nodes and Edges
+
+To add nodes and edges to this plot we will use `geom_node_point()` and `geom_edge_link()` 
+
+- `geom_node_point`: Adds our nodes as circles
+- `geom_edge_link`: Adds edges as straight lines (no arrows) 
+
+\footnotesize
+```{r}
+#| out-height: 40% 
+#| echo: true
+ggraph(net) + geom_node_point(size=6) +
+    geom_edge_link()
+
+```
+
+
+
+## Labeling Nodes
+
+We can use `geom_node_text()` or `geom_node_label()` to label our nodes. 
+
+```{r}
+#| echo: true
+#| out-height: 40%
+ggraph(graph=net,) + 
+  geom_edge_link() +  
+  geom_node_label(aes(label=name)) 
+```
+
+
+## Labeling Nodes
+
+They also have a `repel=T` argument that will move the labels away from the center of the node. 
+
+```{r}
+#| echo: true
+#| out-height: 40%
+ggraph(graph=net) + 
+  geom_edge_link() +  geom_node_point() +
+  geom_node_text(aes(label=name), repel=T) 
+```
+
+
+
+## Layouts
+
+Laying out a plot can impact how useful it is by a lot: 
+
+\footnotesize
+```{r}
+#| layout-ncol: 2
+#| echo: false
+ggraph(net, layout="randomly") + geom_node_point(size=6) +
+    geom_edge_link() + labs(title="Random Layout")
+ggraph(net, layout="circle") + geom_node_point(size=6) +
+    geom_edge_link() + labs(title="Circle Layout")
+
+```
+
+## Layouts Two Broad Approaches:
+
+- Dimension Reduction: Use multivariate techniques to scale into two dimensions
+    - MDS, Pivot Scaling, Eigenvector
+- Force-Directed: Simulates a physical process  
+    - Fruchterman and Reingold, Kamada and Kawai, Davidson-Harel, DrL, Large Graph Layout (LGL), Graphopt, GEM, and Stress majorisation
+
+## Force-Directed
+
+In most of these layouts they do something like: 
+
+  - Each node repulses all other nodes. 
+  - Edges pull two nodes together. 
+  - The balance of this is that groups of nodes with lots of connections are close and groups without them are far.
+
+## Fruchterman and Reingold Example
+
+FR views vertexes as "atomic particles or celestial bodies, exerting attractive and repulsive forces from one another". 
+
+How does this algorithm work?
+
+1. Calculate the amount of repulsion between all nodes.
+2. Calculate the amount of attraction between all adjacent nodes.
+3. Move nodes based on the weight of attraction and repulsion, but limit the amount of movement by a **temperature**. 
+4. Reduce the **temperature**, go back to step 1. 
+
+## Fruchterman and Reingold Example
+
+```{r}
+#| layout-ncol: 2
+#| layout-nrow: 2
+#| echo: false
+
+set.seed(1)
+lo <- create_layout(net, layout="igraph", algorithm="fr", 
+    niter=1) 
+ggplot(lo) + geom_node_point(size=6) +
+    geom_edge_link() + labs(title="1 Iteration")
+
+set.seed(1)
+lo <- create_layout(net, layout="igraph", algorithm="fr", 
+    niter=2) 
+ggplot(lo) + geom_node_point(size=6) +
+    geom_edge_link() + labs(title="2 Iterations")
+
+set.seed(1)
+lo <- create_layout(net, layout="igraph", algorithm="fr", 
+    niter=3) 
+ggplot(lo) + geom_node_point(size=6) +
+    geom_edge_link() + labs(title="3 Iterations")
+
+set.seed(1)
+lo <- create_layout(net, layout="igraph", algorithm="fr", 
+    niter=4) 
+ggplot(lo) + geom_node_point(size=6) +
+    geom_edge_link() + labs(title="4 Iterations")
+
+```
+
+
+## Fruchterman and Reingold Example
+
+```{r}
+#| layout-ncol: 2
+#| layout-nrow: 2
+#| echo: false
+
+
+set.seed(1)
+lo <- create_layout(net, layout="igraph", algorithm="fr", 
+    niter=10) 
+ggplot(lo) + geom_node_point(size=6) +
+    geom_edge_link() + labs(title="10 Iteration")
+
+set.seed(1)
+lo <- create_layout(net, layout="igraph", algorithm="fr", 
+    niter=25) 
+ggplot(lo) + geom_node_point(size=6) +
+    geom_edge_link() + labs(title="25 Iterations")
+
+set.seed(1)
+lo <- create_layout(net, layout="igraph", algorithm="fr", 
+    niter=50) 
+ggplot(lo) + geom_node_point(size=6) +
+    geom_edge_link() + labs(title="50 Iterations")
+
+set.seed(1)
+lo <- create_layout(net, layout="igraph", algorithm="fr", 
+    niter=100) 
+ggplot(lo) + geom_node_point(size=6) +
+    geom_edge_link() + labs(title="100 Iterations")
+
+```
+
+## Force-Directed Issues
+
+- They are not guaranteed to get to the **best** layout. The initial starting values can matter a lot. 
+- They can take a lot of time to run if you have large networks. 
+- You can _sometimes_ improve a layout by changing some of the parameters. 
+
+## Force-Directed Examples
+
+```{r}
+#| layout-ncol: 2
+#| layout-nrow: 2
+#| echo: false
+set.seed(1)
+ggraph(graph=net, "fr") + 
+  geom_edge_link() +  geom_node_point(size=6) + ggtitle("FR (fr)")
+
+set.seed(1)
+ggraph(graph=net, "stress") + 
+  geom_edge_link() +  geom_node_point(size=6) + ggtitle("Stress-minimization (stress)")
+
+set.seed(1)
+ggraph(graph=net, "kk") + 
+  geom_edge_link() +  geom_node_point(size=6) + ggtitle("Kamada and Kawai (kk)")
+
+set.seed(1)
+ggraph(graph=net, "graphopt") + 
+  geom_edge_link() +  geom_node_point(size=6) + ggtitle("Graphopt (graphopt)")
+```
+
+## Setting Layouts
+
+To set the layout you set `layout=` to what you want, you can also pass additional arguments as necessary. 
+
+If you want to create the _exact_ same layout every time run `set.seed()` directly prior to making the plot. This sets the "random seed" that is used. 
+
+\footnotesize 
+```{r}
+#| echo: true
+#| out-height: 40%
+set.seed(1)
+ggraph(graph=net, layout="fr", niter=250) + 
+  geom_edge_link() +  geom_node_point(size=6)
+
+```
+
+
+
+## Layout Tips and Tricks
+
+There are some layouts that work better on larger graphs (lgl - Large Graph Layout and graphopt). 
+
+When you have multiple components in a graph, this can be tricky for a lot of layouts so place around. 
+
+Sometimes it makes sense to only plot the largest component or to remove any isolates. **If you do this make it clear**
+
+## Large Network - DNC
+
+<!-- Discussion of ohio network
+--> 
+
+\footnotesize
+```{r}
+#| cache: true
+#| echo: true
+#| out-height: 40%
+#| 
+oh_edges <- read.csv("data/edge_OH.csv")
+oh_nodes <- read.csv("data/meta_OH.csv")
+
+oh_net <- graph_from_data_frame(oh_edges, vertices=oh_nodes, directed=F)
+oh_net <- delete_edges(oh_net,
+    E(oh_net)[E(oh_net)$edge!="Strong"])
+ggraph(graph=oh_net, "fr") + 
+  geom_edge_link() +  geom_node_point()
+
+```
+
+## Large Network - Only Main Component
+
+We can use the function `largest_component()` to grab just that part. Also the `|>` is a _pipe_ which passes on the output. 
+
+\footnotesize
+```{r}
+#| echo: true
+#| out-height: 40%
+#| cache: true
+
+oh_net |> largest_component() |> 
+    ggraph("fr") + 
+    geom_edge_link() +  geom_node_point()
+
+```
+
+## Large Network - No Isolates
+
+Deleting all the isolates using `V()` and `delete_vertices()`.
+
+\footnotesize
+```{r}
+#| echo: true
+#| out-height: 40%
+#| cache: true 
+
+isolates <- V(oh_net)[degree(oh_net)==0]
+oh_net |> delete_vertices(v=isolates) |> 
+    ggraph("fr") + geom_edge_link() +  geom_node_point()
+
+```
+
+
+## Beyond Layouts - Vertex Attributes
+
+Vertex attributes are included for a variety of reasons. This includes: 
+
+- Demonstrating who is important in a network. 
+- Showing groups in a network. 
+- Presenting other relevant details 
+
+## Scaling by Degree
+
+Often we will scale a node size by a measure of importance, like degree: 
+
+\footnotesize 
+```{r}
+#| echo: true
+#| out-height: 40%
+V(net)$degree <- degree(net)
+ggraph(graph=net, "stress") + 
+  geom_edge_link() +  geom_node_point(aes(size=degree)) +
+  ggtitle("Sized by Degree") + 
+  scale_size("Degree")
+```
+
+
+
+## New Network 
+
+This data is of [Spanish high school students](https://networks.skewed.de/net/spanish_highschools) and includes negative and positive relations. We are going to delete the negative edges.
+
+\footnotesize 
+```{r}
+#| echo: true 
+edges <- read.csv("data/spanish_hs_edges.csv")
+nodes <- read.csv("data/spanish_hs_nodes.csv")
+net <- graph_from_data_frame(edges, vertices=nodes, directed=T)
+neg_edges <- which(E(net)$weight < 0)
+net <- delete_edges(net, neg_edges)
+net
+```
+
+
+## Coloring Vertices
+
+We can color the nodes by setting `aes(color=)` to a vertex attribute. 
+
+\footnotesize 
+```{r}
+#| echo: true 
+#| out-height: 40%
+
+ggraph(graph=net, "stress") + 
+  geom_edge_link() +    
+  geom_node_point(aes(color=Sexo), size=4) +
+  ggtitle("Colored by Sex")
+
+```
+
+## Edges 
+
+There are a few things we might want to do with our edges: 
+
+- Add arrows for a directed network
+- Show edge attributes.
+
+## Edges - General 
+
+I think it is easier to see a network by making the edges gray. 
+
+\footnotesize 
+```{r}
+#| echo: true 
+#| out-height: 40%
+ggraph(graph=net, "stress") + 
+  geom_edge_link(color="gray") +    
+  geom_node_point(aes(color=Sexo), size=4) +
+  ggtitle("Colored by Sex") 
+
+```
+
+## Edges - Adding Arrows 
+
+Arrows are _annoying_ to add here, but there is some good help [online](https://ggraph.data-imaginist.com/articles/Edges.html#decorating-edges). We manualy create an arrow (`arrow`) and manually end them before the node (`end_cap`)
+
+\footnotesize 
+```{r}
+#| echo: true 
+#| out-height: 40%
+ggraph(graph=net, "stress") + 
+  geom_edge_link(color="gray", 
+    arrow = arrow(length = unit(4, 'mm')), 
+    end_cap = circle(3, 'mm')) +    
+  geom_node_point(aes(color=Sexo), size=4) 
+
+```
+
+## Edges - Adding Arrows 
+
+
+\footnotesize 
+```{r}
+#| echo: false 
+#| out-height: 90%
+ggraph(graph=net, "stress") + 
+  geom_edge_link(color="gray", 
+    arrow = arrow(length = unit(4, 'mm')), 
+    end_cap = circle(3, 'mm')) +    
+  geom_node_point(aes(color=Sexo), size=4) 
+
+```
+
+
+## Edges - Adding Attributes 
+
+Finally we can assign edge attributes to aesthetics
+
+\footnotesize 
+```{r}
+#| echo: true 
+#| out-height: 40%
+ggraph(graph=net, "stress") + 
+  geom_edge_link(color="gray", aes(width=weight), 
+    arrow = arrow(length = unit(4, 'mm')), 
+    end_cap = circle(3, 'mm')) +    
+  geom_node_point(aes(color=Sexo), size=4) 
+
+```
+
+
+## Edges - Multiple 
+
+The default for ggraph is to show only a single edge when there are two mutual edges. We can change that by using `geom_edge_fan()`
+
+\footnotesize 
+```{.r}
+ggraph(graph=net, "stress") + 
+  geom_edge_fan(aes(color=weight),
+    arrow = arrow(length = unit(4, 'mm')), 
+    end_cap = circle(3, 'mm')) +    
+  geom_node_point(aes(color=Sexo), size=4) 
+
+```
+
+## Edges - Multiple 
+
+\footnotesize 
+```{r}
+ggraph(graph=net, "stress") + 
+  geom_edge_fan(aes(color=weight),
+    arrow = arrow(length = unit(4, 'mm')), 
+    end_cap = circle(3, 'mm')) +    
+  geom_node_point(aes(color=Sexo), size=4) 
+```
+
+
