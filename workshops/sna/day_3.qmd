@@ -384,10 +384,9 @@ If you are not showing the whole network you _must_ make that clear.
 
 ## Large Network - Ohio Donors
 
-<!-- Discussion of ohio network
---> 
+The Ohio data connects groups based on their shared donation patterns. 
 
-\footnotesize
+
 ```{r}
 #| cache: true
 #| echo: true
@@ -427,7 +426,6 @@ ggraph(graph=oh_net, "kk") +
 
 We can use the function `largest_component()` to grab just that part. Also the `|>` is a _pipe_ which passes on the output. 
 
-\footnotesize
 ```{r}
 #| echo: true
 #| cache: true
@@ -444,6 +442,26 @@ I don't really care about the nodes themselves, what I care about is looking at 
 
 ## Adding Vertex Attribute
 
+We can add vertex attributes to visuals on our network by using the `aes()` function inside of `geom_node_point()` and connecting the attribute name to the aesthetic we want to change: 
+
+```
+geom_node_point(aes(color=degree))
+```
+
+Will color the node based on the vertex attribute named `degree`.
+
+
+## Changing the Scales 
+
+We can also change the scales using the `scales_*_*()` functions. 
+
+- `scale_color_gradient(low="green", high="purple", midpoint=.5)` - The color scale will go from green to purple with the midpoint at 0.5
+- `scale_size_continuous(trans="log10")` - Will impose a log transformation. 
+- `scale_fill_brewer(type="qual", palette=3)` Fills things using a specific [colorbrewer](https://colorbrewer2.org/#type=sequential&scheme=BuGn&n=3) palette. 
+- `scale_color_viridis_c()` - [Colorblind friendly colors](https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html).
+
+## Adding Vertex Attribute - Example
+
 ```{r}
 #| echo: true
 #| cache: true
@@ -452,8 +470,25 @@ oh_net |> largest_component() |>
   ggraph("kk") + 
   geom_edge_link(color="gray") +  
   geom_node_point(aes(color=PerDem)) + 
-  scale_color_gradient2(low="red", high="blue", 
+  scale_color_gradient2("% to Dems", low="red", high="blue", 
   midpoint=50)
+
+```
+
+
+## Adding More Vertex Attribute
+
+```{r}
+#| echo: true
+#| cache: true
+
+oh_net |> largest_component() |> 
+  ggraph("kk") + 
+  geom_edge_link(color="gray") +  
+  geom_node_point(aes(color=PerDem, size=Total)) + 
+  scale_color_gradient2("% to Dems", low="red", high="blue", 
+  midpoint=50) + 
+  scale_size_continuous("Total Donated", trans="log10")
 
 ```
 
@@ -473,7 +508,6 @@ Vertex attributes are included for a variety of reasons. This includes:
 
 This data is of [Spanish high school students](https://networks.skewed.de/net/spanish_highschools) and includes negative and positive relations. We are going to delete the negative edges.
 
-\footnotesize 
 ```{r}
 #| echo: true 
 edges <- read.csv("data/spanish_hs_edges.csv")
@@ -490,10 +524,8 @@ net
 
 Arrows are _annoying_ to add here, but there is some good help [online](https://ggraph.data-imaginist.com/articles/Edges.html#decorating-edges). We manualy create an arrow (`arrow`) and manually end them before the node (`end_cap`)
 
-\footnotesize 
 ```{r}
 #| echo: true 
-#| out-height: 40%
 ggraph(graph=net, "stress") + 
   geom_edge_link(color="gray", 
     arrow = arrow(length = unit(4, 'mm')), 
@@ -505,10 +537,8 @@ ggraph(graph=net, "stress") +
 ## Edges - Adding Arrows 
 
 
-\footnotesize 
 ```{r}
 #| echo: false 
-#| out-height: 90%
 ggraph(graph=net, "stress") + 
   geom_edge_link(color="gray", 
     arrow = arrow(length = unit(4, 'mm')), 
@@ -525,7 +555,6 @@ Finally we can assign edge attributes to aesthetics
 \footnotesize 
 ```{r}
 #| echo: true 
-#| out-height: 40%
 ggraph(graph=net, "stress") + 
   geom_edge_link(color="gray", aes(width=weight), 
     arrow = arrow(length = unit(4, 'mm')), 
@@ -539,7 +568,6 @@ ggraph(graph=net, "stress") +
 
 The default for ggraph is to show only a single edge when there are two mutual edges. We can change that by using `geom_edge_fan()`
 
-\footnotesize 
 ```{.r}
 ggraph(graph=net, "stress") + 
   geom_edge_fan(aes(color=weight),
@@ -553,6 +581,7 @@ ggraph(graph=net, "stress") +
 
 \footnotesize 
 ```{r}
+#| echo: false 
 ggraph(graph=net, "stress") + 
   geom_edge_fan(aes(color=weight),
     arrow = arrow(length = unit(4, 'mm')), 

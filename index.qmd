@@ -13,6 +13,7 @@ author: ""
 ## Social Network Analysis Bootcamp
 - [Intro to SNA](workshops/sna/day_1.qmd)
 - [Measures of Centrality](workshops/sna/day_2.qmd)
+- [Visualizing Networks](workshops/sna/day_3.qmd)
 
 ## Other Resources 
 
