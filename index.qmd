@@ -17,6 +17,7 @@ author: ""
 
 ## Other Resources 
 
+- [Social Network Analysis in R Guide](pages/SNA_Code.qmd)
 - [Statnet and igraph guide](pages/statnet_igraph.qmd)
 - [Manipulating and Summarizing Data in R](workshops/individual/wrangling_summarizing.qmd)
 
