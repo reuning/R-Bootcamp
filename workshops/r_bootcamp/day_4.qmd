@@ -1,6 +1,13 @@
 ---
 title: "Introduction to R: Plotting and Reports"
-format: revealjs
+format: 
+    clean-revealjs:
+        width: 1600
+        height: 900
+        slide-number: false
+        callout-icon: false
+        execute:
+            echo: true
 revealjs-plugins:
   - codefocus
 ---
@@ -19,7 +26,7 @@ Today we are going to keep using a subset of country data from [The Quality of G
 - Download the [data we'll be using here](images/country_data.csv)
 - You can open it with `read_csv()` and if you need more help check out the [first day of slides.](https://kevinreuning.com/presentations/workshops/r_bootcamp/day_1.html)
 - There is a description of all the [variables I've included here.](https://kevinreuning.com/presentations/workshops/r_bootcamp/country_data.html) 
-
+- We need the following packages installed: `install.packages(c("tidyverse"))`
 
 ```{r}
 library(tidyverse)

@@ -1,6 +1,13 @@
 ---
 title: "Introduction to R: Plotting"
-format: revealjs
+format: 
+    clean-revealjs:
+        width: 1600
+        height: 900
+        slide-number: false
+        callout-icon: false
+        execute:
+            echo: true
 revealjs-plugins:
   - codefocus
 ---
@@ -30,6 +37,7 @@ Today we are going to keep using a subset of country data from [The Quality of G
 - Download the [data we'll be using here](images/country_data.csv)
 - You can open it with `read_csv()` and if you need more help check out the [first day of slides.](https://kevinreuning.com/presentations/workshops/r_bootcamp/day_1.html)
 - There is a description of all the [variables I've included here.](https://kevinreuning.com/presentations/workshops/r_bootcamp/country_data.html) 
+- We need the following packages installed: `install.packages(c("tidyverse"))`
 
 
 ```{r}
@@ -41,7 +49,8 @@ df <- read_csv("country_data.csv")
 
 ## From Last Week
 
-Our groups could have better names than 0, 1, 2, and 3. 
+We are going to use a better measure of electoral type: `br_elect` which creates 4 categories (No elections=0, Single-party elections=1, non-democratic multi-party elections=2, democratic elections= 3)
+
 
 ```{r}
 df %>% filter(!is.na(br_elect)) %>% 
@@ -140,17 +149,15 @@ df %>% mutate(
 
 ## Check 
 
-There is a variable that captures the fertility rate, mutate it into a variable with 3 categories one that is around replacement rate (2.1), one that is below it, and one that is above it. 
+There is a variable that captures the fertility rate, mutate it into a variable with 3 categories one that is around replacement rate (between 1.9 and 2.3), one that is below that, and one that is above that (it goes from 0 to almost 7).
 
 Then `group_by()` that new variable and count up how many observations in each bin. 
-
-(it might help to use `range()` before identifying the bins)
 
 ## My Solution
 
 ```{r}
 df %>% mutate(
-    fert_groups = cut(wdi_fertility, breaks=c(0, 1.8, 2.4, Inf), 
+    fert_groups = cut(wdi_fertility, breaks=c(0, 1.9, 2.3, 7), 
             labels=c("Below", "Replacement", "Above"))
             ) %>%
     group_by(fert_groups) %>% 

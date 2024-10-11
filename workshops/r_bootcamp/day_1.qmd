@@ -1,7 +1,14 @@
 ---
 title: "Introduction to R: Basics"
 author: "Kevin Reuning"
-format: revealjs
+format: 
+    clean-revealjs:
+        width: 1600
+        height: 900
+        slide-number: false
+        callout-icon: false
+        execute:
+            echo: true
 ---
 
 # Who am I
@@ -10,7 +17,7 @@ format: revealjs
 
 ::: {.column width="75%"}
 - I'm Kevin Reuning (ROY-ning). 
-- I'm an Assistant Professor in Political Science. 
+- I'm an Associate Professor in Political Science. 
 - Prior to grad school I had very little experience in coding. 
 :::
 
@@ -414,10 +421,11 @@ Take a moment now, and look at the manual of one of these functions.
 
 - A lot of data science work is done using the Tidyverse suite of packages.
 - We can install the entire suite using: `install.package()`
+- We are going to install a few other packages we will use during the bootcamp now as well.
 
 Run: 
 ```{.R}
-install.packages("tidyverse")
+install.packages(c("tidyverse", "huxtable", "flextable", "officer"))
 ```
 
 There might be a popup asking about installing things from "Source" you can hit no on it. 
