@@ -14,3 +14,5 @@ node_modules
 /presentations/
 
 .vdoc.r
+
+anes*.csv
